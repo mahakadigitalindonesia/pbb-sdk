@@ -1,0 +1,45 @@
+{
+    "name": "mdigi/pbb-sdk",
+    "description": "PBB SDK",
+    "type": "project",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Abdul Aziz Nurfarhana",
+            "email": "farhan@mdigi.tech"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Mdigi\\PBB\\": "src/",
+            "Mdigi\\PBB\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mdigi\\PBB\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-f": "vendor/bin/phpunit --filter"
+    },
+    "require": {
+        "php": "^7.3|^8.0",
+        "illuminate/support": "^8.0",
+        "yajra/laravel-oci8": "^8"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.5"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mdigi\\PBB\\PBBServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
