@@ -3,6 +3,9 @@
 return [
     'routes' => [
         'prefix' => 'mdigi',
-        'middleware' => ['web']
+        'middleware' => ['web'],
+    ],
+    'database' => [
+        'connection' => 'pbb',
     ]
 ];

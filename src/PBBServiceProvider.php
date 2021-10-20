@@ -5,13 +5,14 @@ namespace Mdigi\PBB;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Mdigi\PBB\Contracts\LookupItemService;
 
 class PBBServiceProvider extends ServiceProvider
 {
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'pbb');
-        $this->mergeConfigFrom(__DIR__ . '/../config/oracle.php', 'pbb.database');
+        $this->registerServices();
     }
 
     public function boot()
@@ -19,10 +20,6 @@ class PBBServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config('pbb.php'),
-            ], 'config');
-
-            $this->publishes([
-                __DIR__ . '/../config/oracle.php' => config('pbb.database.php'),
             ], 'config');
 
             $this->publishes([
@@ -41,6 +38,11 @@ class PBBServiceProvider extends ServiceProvider
 
         $this->registerRoutes();
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'pbb');
+    }
+
+    protected function registerServices()
+    {
+        $this->app->bind(LookupItemService::class, Services\LookupItemService::class);
     }
 
     protected function registerRoutes()

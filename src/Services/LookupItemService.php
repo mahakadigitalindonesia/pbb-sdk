@@ -4,66 +4,76 @@
 namespace Mdigi\PBB\Services;
 
 
-class LookupItemService implements \Mdigi\PBB\Contracts\LookupItemService
+use Mdigi\PBB\Models\LookupItem;
+use Mdigi\PBB\Dtos\LookupItem as LookupItemDto;
+use Mdigi\PBB\Contracts\LookupItemService as LookupItemContract;
+
+class LookupItemService implements LookupItemContract
 {
-
-    public function pekerjaan($kodeItem)
+    public function pekerjaan($kodeItem = null)
     {
-        // TODO: Implement pekerjaan() method.
+        return $this->getLookUpItem(LookupItemContract::PEKERJAAN, $kodeItem);
     }
 
-    public function kepemilikan($kodeItem)
+    public function kepemilikan($kodeItem = null)
     {
-        // TODO: Implement kepemilikan() method.
+        return $this->getLookUpItem(LookupItemContract::KEPEMILIKAN, $kodeItem);
     }
 
-    public function tanah($kodeItem)
+    public function tanah($kodeItem = null)
     {
-        // TODO: Implement tanah() method.
+        return $this->getLookUpItem(LookupItemContract::TANAH, $kodeItem);
     }
 
-    public function transaksiLSPOP($kodeItem)
+    public function transaksiLSPOP($kodeItem = null)
     {
-        // TODO: Implement transaksiLSPOP() method.
+        return $this->getLookUpItem(LookupItemContract::TRANSAKSI_LSPOP, $kodeItem);
     }
 
-    public function kondisiUmum($kodeItem)
+    public function kondisiUmum($kodeItem = null)
     {
-        // TODO: Implement kondisiUmum() method.
+        return $this->getLookUpItem(LookupItemContract::KONDISI_UMUM, $kodeItem);
     }
 
-    public function konstruksi($kodeItem)
+    public function konstruksi($kodeItem = null)
     {
-        // TODO: Implement konstruksi() method.
+        return $this->getLookUpItem(LookupItemContract::KONSTRUKSI, $kodeItem);
     }
 
-    public function atap($kodeItem)
+    public function atap($kodeItem = null)
     {
-        // TODO: Implement atap() method.
+        return $this->getLookUpItem(LookupItemContract::ATAP, $kodeItem);
     }
 
-    public function lantai($kodeItem)
+    public function lantai($kodeItem = null)
     {
-        // TODO: Implement lantai() method.
+        return $this->getLookUpItem(LookupItemContract::LANTAI, $kodeItem);
     }
 
-    public function langit($kodeItem)
+    public function langit($kodeItem = null)
     {
-        // TODO: Implement langit() method.
+        return $this->getLookUpItem(LookupItemContract::LANGIT, $kodeItem);
     }
 
-    public function kolamRenang($kodeItem)
+    public function kolamRenang($kodeItem = null)
     {
-        // TODO: Implement kolamRenang() method.
+        return $this->getLookUpItem(LookupItemContract::KOLAM_RENANG, $kodeItem);
     }
 
-    public function bahanPagar($kodeItem)
+    public function bahanPagar($kodeItem = null)
     {
-        // TODO: Implement bahanPagar() method.
+        return $this->getLookUpItem(LookupItemContract::BAHAN_PAGAR, $kodeItem);
     }
 
-    public function dinding($kodeItem)
+    public function dinding($kodeItem = null)
     {
-        // TODO: Implement dinding() method.
+        return $this->getLookUpItem(LookupItemContract::DINDING, $kodeItem);
+    }
+
+    private function getLookUpItem($kodeGroup, $kodeItem = null)
+    {
+        $lookupItem = LookupItem::where('kd_lookup_group', $kodeGroup);
+        $lookupItem = $kodeItem ? $lookupItem->where('kd_lookup_item', $kodeItem) : $lookupItem;
+        return $kodeItem ? new LookupItemDto($lookupItem->first()) : $lookupItem->get()->mapInto(LookupItemDto::class);
     }
 }

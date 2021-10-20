@@ -19,16 +19,16 @@ interface LookupItemService
     const BAHAN_PAGAR = "40";
     const DINDING = "42";
 
-    public function pekerjaan($kodeItem);
-    public function kepemilikan($kodeItem);
-    public function tanah($kodeItem);
-    public function transaksiLSPOP($kodeItem);
-    public function kondisiUmum($kodeItem);
-    public function konstruksi($kodeItem);
-    public function atap($kodeItem);
-    public function lantai($kodeItem);
-    public function langit($kodeItem);
-    public function kolamRenang($kodeItem);
-    public function bahanPagar($kodeItem);
-    public function dinding($kodeItem);
+    public function pekerjaan($kodeItem = null);
+    public function kepemilikan($kodeItem = null);
+    public function tanah($kodeItem = null);
+    public function transaksiLSPOP($kodeItem = null);
+    public function kondisiUmum($kodeItem = null);
+    public function konstruksi($kodeItem = null);
+    public function atap($kodeItem = null);
+    public function lantai($kodeItem = null);
+    public function langit($kodeItem = null);
+    public function kolamRenang($kodeItem = null);
+    public function bahanPagar($kodeItem = null);
+    public function dinding($kodeItem = null);
 }
