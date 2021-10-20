@@ -5,6 +5,8 @@ namespace Mdigi\PBB;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Mdigi\PBB\Contracts\KecamatanService;
+use Mdigi\PBB\Contracts\KelurahanService;
 use Mdigi\PBB\Contracts\LookupItemService;
 
 class PBBServiceProvider extends ServiceProvider
@@ -43,6 +45,8 @@ class PBBServiceProvider extends ServiceProvider
     protected function registerServices()
     {
         $this->app->bind(LookupItemService::class, Services\LookupItemService::class);
+        $this->app->bind(KecamatanService::class, Services\KecamatanService::class);
+        $this->app->bind(KelurahanService::class, Services\KelurahanService::class);
     }
 
     protected function registerRoutes()

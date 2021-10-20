@@ -8,9 +8,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Mdigi\PBB\Models\Traits\ConfigurableDatabaseConnection;
 
-class LookupItem extends Model
+class Kecamatan extends Model
 {
     use HasFactory, ConfigurableDatabaseConnection;
 
-    protected $table = 'lookup_item';
+    public const table = 'ref_kecamatan';
+    public const kodeKecamatan = self::table . '.kd_kecamatan';
+    public const namaKecamatan = self::table . '.nm_kecamatan';
+
+    protected $table = self::table;
+
+
 }
