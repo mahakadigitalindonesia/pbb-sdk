@@ -7,13 +7,14 @@ namespace Mdigi\PBB\Dtos;
 class ObjekPajak extends ObjekPajakKeys
 {
     public $nop;
-    public $nik;
+    public $wajibPajakId;
     public $jalan;
     public $rt;
     public $rw;
     public $nomorSertifikat;
     public $nomorFormulirSPOP;
-    public $statusWP;
+    public $kodeKepemilikan;
+    public $kepemilikan;
     public $kelurahan;
     public $kecamatan;
     public $luasTanah;
@@ -28,13 +29,14 @@ class ObjekPajak extends ObjekPajakKeys
         if ($model) {
             $this->setKeys($model);
             $this->nop = (string) new NOP($model->kd_propinsi, $model->kd_dati2, $model->kd_kecamatan, $model->kd_kelurahan, $model->kd_blok, $model->no_urut, $model->kd_jns_op);
-            $this->nik = trim($model->subjek_pajak_id);
+            $this->wajibPajakId = trim($model->subjek_pajak_id);
             $this->jalan = $model->jalan_op;
             $this->rt = $model->rt ?? '000';
             $this->rw = $model->rw ?? '00';
             $this->nomorSertifikat = $model->no_persil ?? '-';
             $this->nomorFormulirSPOP = $model->no_formulir_spop;
-            $this->statusWP = $model->kd_status_wp;
+            $this->kodeKepemilikan = $model->kd_status_wp;
+            $this->kepemilikan = $model->kepemilikan;
             $this->luasTanah = $model->total_luas_bumi ?? '0';
             $this->luasBangunan = $model->total_luas_bng ?? '0';
             $this->njopTanah = $model->njop_bumi ?? '0';

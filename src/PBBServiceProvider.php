@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Mdigi\PBB\Contracts\BangunanService;
 use Mdigi\PBB\Contracts\KecamatanService;
 use Mdigi\PBB\Contracts\KelurahanService;
+use Mdigi\PBB\Contracts\KetetapanService;
 use Mdigi\PBB\Contracts\LookupItemService;
 use Mdigi\PBB\Contracts\ObjekPajakService;
 use Mdigi\PBB\Contracts\PembayaranService;
@@ -15,6 +16,7 @@ use Mdigi\PBB\Contracts\WajibPajakService;
 use Mdigi\PBB\Services\BangunanServiceImpl;
 use Mdigi\PBB\Services\KecamatanServiceImpl;
 use Mdigi\PBB\Services\KelurahanServiceImpl;
+use Mdigi\PBB\Services\KetetapanServiceImpl;
 use Mdigi\PBB\Services\LookupItemServiceImpl;
 use Mdigi\PBB\Services\ObjekPajakServiceImpl;
 use Mdigi\PBB\Services\PembayaranServiceImpl;
@@ -62,6 +64,7 @@ class PBBServiceProvider extends ServiceProvider
         $this->app->bind(WajibPajakService::class, WajibPajakServiceImpl::class);
         $this->app->bind(BangunanService::class, BangunanServiceImpl::class);
         $this->app->bind(PembayaranService::class, PembayaranServiceImpl::class);
+        $this->app->bind(KetetapanService::class, KetetapanServiceImpl::class);
     }
 
     protected function registerRoutes()
