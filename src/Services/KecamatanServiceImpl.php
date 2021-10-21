@@ -8,7 +8,7 @@ use Mdigi\PBB\Contracts\KecamatanService as KecamatanContract;
 use Mdigi\PBB\Dtos\Kecamatan as KecamatanDto;
 use Mdigi\PBB\Models\Kecamatan;
 
-class KecamatanService implements KecamatanContract
+class KecamatanServiceImpl implements KecamatanContract
 {
 
     public function findAll()

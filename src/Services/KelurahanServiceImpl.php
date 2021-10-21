@@ -4,12 +4,12 @@
 namespace Mdigi\PBB\Services;
 
 
-use Mdigi\PBB\Contracts\KelurahanService as KelurahanContract;
+use Mdigi\PBB\Contracts\KelurahanService;
 use Mdigi\PBB\Dtos\Kelurahan as KelurahanDto;
 use Mdigi\PBB\Models\Kecamatan;
 use Mdigi\PBB\Models\Kelurahan;
 
-class KelurahanService implements KelurahanContract
+class KelurahanServiceImpl implements KelurahanService
 {
 
     public function findByKelurahan(KelurahanDto $kelurahan)
