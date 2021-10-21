@@ -6,8 +6,8 @@ namespace Mdigi\PBB\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Mdigi\PBB\Dtos\OPColumns;
-use Mdigi\PBB\Dtos\TransaksiColumns;
+use Mdigi\PBB\Helpers\OPColumns;
+use Mdigi\PBB\Helpers\TransaksiColumns;
 use Mdigi\PBB\Models\Traits\ConfigurableDatabaseConnection;
 
 class Ketetapan extends Model

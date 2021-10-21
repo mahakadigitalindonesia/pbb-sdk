@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mdigi\PBB\Contracts\KelurahanService;
 use Mdigi\PBB\Dtos\Blok as BlokDto;
 use Mdigi\PBB\Dtos\Kelurahan as KelurahanDto;
-use Mdigi\PBB\Dtos\OPColumns;
+use Mdigi\PBB\Helpers\OPColumns;
 use Mdigi\PBB\Models\Blok;
 use Mdigi\PBB\Models\BlokZonaNilaiTanah;
 use Mdigi\PBB\Models\Kecamatan;

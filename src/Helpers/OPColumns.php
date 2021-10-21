@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Mdigi\PBB\Dtos;
+namespace Mdigi\PBB\Helpers;
 
 
 interface OPColumns

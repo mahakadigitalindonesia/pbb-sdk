@@ -9,7 +9,7 @@ use Mdigi\PBB\Contracts\LookupItemService;
 use Mdigi\PBB\Contracts\ObjekPajakService;
 use Mdigi\PBB\Dtos\NOP;
 use Mdigi\PBB\Dtos\ObjekPajak as ObjekPajakDto;
-use Mdigi\PBB\Dtos\OPColumns;
+use Mdigi\PBB\Helpers\OPColumns;
 use Mdigi\PBB\Models\Kecamatan;
 use Mdigi\PBB\Models\Kelurahan;
 use Mdigi\PBB\Models\LookupItem;

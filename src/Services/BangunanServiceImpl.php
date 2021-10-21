@@ -7,7 +7,7 @@ namespace Mdigi\PBB\Services;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mdigi\PBB\Contracts\BangunanService;
 use Mdigi\PBB\Dtos\NOP;
-use Mdigi\PBB\Dtos\OPColumns;
+use Mdigi\PBB\Helpers\OPColumns;
 use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Dtos\Bangunan as BangunanDto;
 use Mdigi\PBB\Models\PenggunaanBangunan;

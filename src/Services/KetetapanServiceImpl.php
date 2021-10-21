@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Mdigi\PBB\Contracts\KetetapanService;
 use Mdigi\PBB\Dtos\Ketetapan as KetetapanDto;
 use Mdigi\PBB\Dtos\NOP;
-use Mdigi\PBB\Dtos\TransaksiColumns;
+use Mdigi\PBB\Helpers\TransaksiColumns;
 use Mdigi\PBB\Helpers\DatabaseRaw;
 use Mdigi\PBB\Models\Kecamatan;
 use Mdigi\PBB\Models\Kelurahan;

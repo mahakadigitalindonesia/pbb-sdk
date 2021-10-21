@@ -7,8 +7,8 @@ namespace Mdigi\PBB\Services;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mdigi\PBB\Contracts\PembayaranService;
 use Mdigi\PBB\Dtos\NOP;
-use Mdigi\PBB\Dtos\OPColumns;
-use Mdigi\PBB\Dtos\TransaksiColumns;
+use Mdigi\PBB\Helpers\OPColumns;
+use Mdigi\PBB\Helpers\TransaksiColumns;
 use Mdigi\PBB\Models\Pembayaran;
 use Mdigi\PBB\Dtos\Pembayaran as PembayaranDto;
 
