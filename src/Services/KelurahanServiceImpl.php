@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mdigi\PBB\Contracts\KelurahanService;
 use Mdigi\PBB\Dtos\Blok as BlokDto;
 use Mdigi\PBB\Dtos\Kelurahan as KelurahanDto;
-use Mdigi\PBB\Dtos\OPKeys;
+use Mdigi\PBB\Dtos\OPColumns;
 use Mdigi\PBB\Models\Blok;
 use Mdigi\PBB\Models\BlokZonaNilaiTanah;
 use Mdigi\PBB\Models\Kecamatan;
@@ -35,9 +35,9 @@ class KelurahanServiceImpl implements KelurahanService
 
     public function blok($kodeKecamatan, $kodeKelurahan, $kodeBlok = null)
     {
-        $data = Blok::query()->where(OPKeys::kodeKecamatan, $kodeKecamatan)
-            ->where(OPKeys::kodeKelurahan, $kodeKelurahan);
-        $data = $kodeBlok ? $data->where(OPKeys::kodeBlok, $kodeBlok) : $data;
+        $data = Blok::query()->where(OPColumns::kodeKecamatan, $kodeKecamatan)
+            ->where(OPColumns::kodeKelurahan, $kodeKelurahan);
+        $data = $kodeBlok ? $data->where(OPColumns::kodeBlok, $kodeBlok) : $data;
         throw_if($data->get()->isEmpty(), new ModelNotFoundException());
         return $data->count() > 1 ? $data->get()->mapInto(BlokDto::class) : new BlokDto($data->firstOrFail());
     }
@@ -57,9 +57,9 @@ class KelurahanServiceImpl implements KelurahanService
 
     public function blokZonaNilaiTanah($kodeKecamatan, $kodeKelurahan, $kodeBlok, $kode = null)
     {
-        $data = BlokZonaNilaiTanah::query()->where(OPKeys::kodeKecamatan, $kodeKecamatan)
-            ->where(OPKeys::kodeKelurahan, $kodeKelurahan)
-            ->where(OPKeys::kodeBlok, $kodeBlok);
+        $data = BlokZonaNilaiTanah::query()->where(OPColumns::kodeKecamatan, $kodeKecamatan)
+            ->where(OPColumns::kodeKelurahan, $kodeKelurahan)
+            ->where(OPColumns::kodeBlok, $kodeBlok);
         $data = $kode ? $data->where('kd_znt', $kode) : $data;
         throw_if($data->get()->isEmpty(), new ModelNotFoundException());
         return $data->count() > 1 ? $data->get()->mapInto(BlokZonaNilaiTanahDto::class) : new BlokZonaNilaiTanahDto($data->firstOrFail());

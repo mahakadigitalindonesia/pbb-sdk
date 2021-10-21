@@ -7,7 +7,7 @@ namespace Mdigi\PBB\Services;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mdigi\PBB\Contracts\BangunanService;
 use Mdigi\PBB\Dtos\NOP;
-use Mdigi\PBB\Dtos\OPKeys;
+use Mdigi\PBB\Dtos\OPColumns;
 use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Dtos\Bangunan as BangunanDto;
 use Mdigi\PBB\Models\PenggunaanBangunan;
@@ -38,12 +38,12 @@ class BangunanServiceImpl implements BangunanService
 
     private function getQuery(NOP $nop)
     {
-        return Bangunan::query()->where(OPKeys::kodeProvinsi, $nop->kodeProvinsi)
-            ->where(OPKeys::kodeDati, $nop->kodeDati)
-            ->where(OPKeys::kodeKecamatan, $nop->kodeKecamatan)
-            ->where(OPKeys::kodeKelurahan, $nop->kodeKelurahan)
-            ->where(OPKeys::kodeBlok, $nop->kodeBlok)
-            ->where(OPKeys::nomorUrut, $nop->nomorUrut)
-            ->where(OPKeys::kodeJenis, $nop->kodeJenis);
+        return Bangunan::query()->where(OPColumns::kodeProvinsi, $nop->kodeProvinsi)
+            ->where(OPColumns::kodeDati, $nop->kodeDati)
+            ->where(OPColumns::kodeKecamatan, $nop->kodeKecamatan)
+            ->where(OPColumns::kodeKelurahan, $nop->kodeKelurahan)
+            ->where(OPColumns::kodeBlok, $nop->kodeBlok)
+            ->where(OPColumns::nomorUrut, $nop->nomorUrut)
+            ->where(OPColumns::kodeJenis, $nop->kodeJenis);
     }
 }

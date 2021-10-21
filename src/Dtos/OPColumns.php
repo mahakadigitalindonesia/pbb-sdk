@@ -4,7 +4,7 @@
 namespace Mdigi\PBB\Dtos;
 
 
-interface OPKeys
+interface OPColumns
 {
     const kodeProvinsi = 'kd_propinsi';
     const kodeDati = 'kd_dati2';
