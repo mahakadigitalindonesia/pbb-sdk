@@ -5,11 +5,13 @@ namespace Mdigi\PBB;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Mdigi\PBB\Contracts\BangunanService;
 use Mdigi\PBB\Contracts\KecamatanService;
 use Mdigi\PBB\Contracts\KelurahanService;
 use Mdigi\PBB\Contracts\LookupItemService;
 use Mdigi\PBB\Contracts\ObjekPajakService;
 use Mdigi\PBB\Contracts\WajibPajakService;
+use Mdigi\PBB\Services\BangunanServiceImpl;
 use Mdigi\PBB\Services\KecamatanServiceImpl;
 use Mdigi\PBB\Services\KelurahanServiceImpl;
 use Mdigi\PBB\Services\LookupItemServiceImpl;
@@ -56,6 +58,7 @@ class PBBServiceProvider extends ServiceProvider
         $this->app->bind(KelurahanService::class, KelurahanServiceImpl::class);
         $this->app->bind(ObjekPajakService::class, ObjekPajakServiceImpl::class);
         $this->app->bind(WajibPajakService::class, WajibPajakServiceImpl::class);
+        $this->app->bind(BangunanService::class, BangunanServiceImpl::class);
     }
 
     protected function registerRoutes()
