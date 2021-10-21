@@ -10,6 +10,8 @@ use Mdigi\PBB\Dtos\NOP;
 use Mdigi\PBB\Dtos\OPKeys;
 use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Dtos\Bangunan as BangunanDto;
+use Mdigi\PBB\Models\PenggunaanBangunan;
+use Mdigi\PBB\Dtos\PenggunaanBangunan as PenggunaanBangunanDto;
 
 class BangunanServiceImpl implements BangunanService
 {
@@ -24,6 +26,14 @@ class BangunanServiceImpl implements BangunanService
     {
         $data = $this->getQuery($nop)->where('no_bng', $nomor);
         return new BangunanDto($data->firstOrFail());
+    }
+
+    public function penggunaanBangunan($kodeJPB = null)
+    {
+        $data = PenggunaanBangunan::query();
+        $data = $kodeJPB ? $data->where('kd_jpb_jpt', $kodeJPB) : $data;
+        throw_if($data->get()->isEmpty(), new ModelNotFoundException());
+        return $data->count() > 1 ? $data->get()->mapInto(PenggunaanBangunanDto::class) : new PenggunaanBangunanDto($data->firstOrFail());
     }
 
     private function getQuery(NOP $nop)
