@@ -4,7 +4,6 @@
 namespace Mdigi\PBB\Dtos;
 
 
-use Illuminate\Support\Str;
 use Mdigi\PBB\Exceptions\FormatNopNotValidException;
 
 class NOP

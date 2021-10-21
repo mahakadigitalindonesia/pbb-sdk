@@ -28,7 +28,7 @@ class ObjekPajak extends ObjekPajakKeys
     {
         if ($model) {
             $this->setKeys($model);
-            $this->nop = (string) new NOP($model->kd_propinsi, $model->kd_dati2, $model->kd_kecamatan, $model->kd_kelurahan, $model->kd_blok, $model->no_urut, $model->kd_jns_op);
+            $this->nop = (string)new NOP($model->kd_propinsi, $model->kd_dati2, $model->kd_kecamatan, $model->kd_kelurahan, $model->kd_blok, $model->no_urut, $model->kd_jns_op);
             $this->wajibPajakId = trim($model->subjek_pajak_id);
             $this->jalan = $model->jalan_op;
             $this->rt = $model->rt ?? '000';

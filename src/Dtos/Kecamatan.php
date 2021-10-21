@@ -10,8 +10,7 @@ class Kecamatan
 
     public function __construct($model = null)
     {
-        if($model)
-        {
+        if ($model) {
             $this->kode = $model->kd_kecamatan;
             $this->nama = $model->nm_kecamatan;
         }

@@ -11,10 +11,9 @@ class BlokZonaNilaiTanah
     public $kodeBlok;
     public $kode;
 
-    public function __construct($model=null)
+    public function __construct($model = null)
     {
-        if($model)
-        {
+        if ($model) {
             $this->kodeKecamatan = $model->kd_kecamatan;
             $this->kodeKelurahan = $model->kd_kelurahan;
             $this->kodeBlok = $model->kd_blok;

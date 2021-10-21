@@ -56,17 +56,17 @@ class Ketetapan extends TransaksiKeys
         }
     }
 
-    private function formatAlamatOP($model)
-    {
-        $rt = $model->rt_op ?? '000';
-        $rw = $model->rw_op ?? '00';
-        return $model->jalan_op . ' RT ' . $rt . ' RW ' . $rw . ', KEL/DESA ' . $model->nm_kelurahan . ', KEC ' . $model->nm_kecamatan;
-    }
-
     private function formatAlamatWP($model)
     {
         $rt = $model->rt_wp ?? '000';
         $rw = $model->rw_wp ?? '00';
         return $model->jln_wp_sppt . ' RT ' . $rt . ' RW ' . $rw . ', KEL/DESA ' . $model->kelurahan_wp_sppt . ', KABUPATEN/KOTA ' . $model->kota_wp_sppt;
+    }
+
+    private function formatAlamatOP($model)
+    {
+        $rt = $model->rt_op ?? '000';
+        $rw = $model->rw_op ?? '00';
+        return $model->jalan_op . ' RT ' . $rt . ' RW ' . $rw . ', KEL/DESA ' . $model->nm_kelurahan . ', KEC ' . $model->nm_kecamatan;
     }
 }

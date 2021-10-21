@@ -4,8 +4,6 @@
 namespace Mdigi\PBB\Dtos;
 
 
-use Illuminate\Support\Carbon;
-
 class Pembayaran extends TransaksiKeys
 {
     public $nop;
