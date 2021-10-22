@@ -11,6 +11,7 @@ class WajibPajak
     public $jalan;
     public $rt;
     public $rw;
+    public $blokKavlingNomor;
     public $kelurahan;
     public $kecamatan;
     public $kota;
@@ -28,6 +29,7 @@ class WajibPajak
             $this->jalan = $model->jalan_wp;
             $this->rt = $model->rt_wp ?? '000';
             $this->rw = $model->rw_wp ?? '00';
+            $this->blokKavlingNomor = $model->blok_kav_no_wp ?? '-';
             $this->kelurahan = $model->kelurahan_wp;
             $this->kecamatan = $model->nm_kecamatan ?? '-';
             $this->kota = $model->kota_wp;
