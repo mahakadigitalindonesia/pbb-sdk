@@ -7,5 +7,8 @@ return [
     ],
     'database' => [
         'connection' => 'pbb',
-    ]
+    ],
+    'transaksi' => [
+        'max_year_backward' => 10
+    ],
 ];

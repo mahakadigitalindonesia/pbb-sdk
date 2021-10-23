@@ -4,7 +4,7 @@
 namespace Mdigi\PBB\Dtos;
 
 
-class TransaksiKeys extends ObjekPajakKeys
+abstract class TransaksiKeys extends ObjekPajakKeys
 {
     public $tahun;
 

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Mdigi\PBB\Http\Controllers\KecamatanController;
 use Mdigi\PBB\Http\Controllers\KelurahanController;
 use Mdigi\PBB\Http\Controllers\ObjekPajakController;
+use Mdigi\PBB\Http\Controllers\TransaksiController;
 use Mdigi\PBB\Http\Controllers\WajibPajakController;
 
 Route::prefix('kecamatan')->group(function () {
@@ -19,6 +20,9 @@ Route::prefix('kecamatan')->group(function () {
 Route::get('objek-pajak/{nop}', [ObjekPajakController::class, 'nop'])->name('pbb.objek-pajak.nop');
 
 Route::get('wajib-pajak/{id}', [WajibPajakController::class, 'detail'])->name('pbb.wajib-pajak.detail');
+
+Route::get('transaksi/{nop}', [TransaksiController::class, 'nop'])->name('pbb.transaksi.nop');
+Route::get('transaksi/{nop}/{tahun}', [TransaksiController::class, 'nopTahun'])->name('pbb.transaksi.nop.tahun');
 
 
 

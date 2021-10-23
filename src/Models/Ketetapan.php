@@ -32,6 +32,10 @@ class Ketetapan extends Model
 
     protected $appends = ['is_paid'];
 
+    protected $dates = [
+        'tgl_jatuh_tempo_sppt',
+    ];
+
     public function getIsPaidAttribute()
     {
         return $this->status_pembayaran_sppt > 0;
