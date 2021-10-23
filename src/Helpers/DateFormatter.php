@@ -10,6 +10,6 @@ class DateFormatter
 {
     public static function format(string $date, string $format = DateFormat::dFY)
     {
-        return Carbon::parse($date)->format($format);
+        return Carbon::parse($date)->translatedFormat($format);
     }
 }

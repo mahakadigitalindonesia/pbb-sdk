@@ -16,6 +16,8 @@ class Transaksi extends TransaksiKeys
     public $jumlahPembayaran;
     public $dendaPembayaran;
     public $tanggalPembayaran;
+    public $totalPembayaran;
+    public $totalTunggakan;
     public $isPaid;
 
     public function __construct($model = null)
@@ -36,10 +38,12 @@ class Transaksi extends TransaksiKeys
             $dendaKetetapan = $model->denda_ketetapan ?? '0';
             $dendaPembayaran = $model->denda_pembayaran ?? '0';
             $this->dendaKetetapan = ($model->is_paid) ? $dendaPembayaran : $dendaKetetapan;
-            $this->jumlahPembayaran = $model->jumlah_pembayaran ?? '0';
+            $this->jumlahPembayaran =$model->jumlah_pembayaran ?? '0';
             $this->dendaPembayaran = $model->denda_pembayaran ?? '0';
             $this->tanggalPembayaran = $model->tgl_pembayaran_sppt ? DateFormatter::format($model->tgl_pembayaran_sppt, DateFormat::dFY_His) : '-';
             $this->isPaid = $model->is_paid;
+            $this->totalPembayaran = (string) ($model->denda_pembayaran + $model->jumlah_pembayaran);
+            $this->totalTunggakan = $model->is_paid ? '0' : (string) ($model->pbb_yg_harus_dibayar_sppt + $model->denda_ketetapan);
         }
     }
 }
