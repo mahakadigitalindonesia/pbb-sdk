@@ -14,6 +14,7 @@ use Mdigi\PBB\Contracts\ObjekPajakService;
 use Mdigi\PBB\Contracts\PembayaranService;
 use Mdigi\PBB\Contracts\TransaksiService;
 use Mdigi\PBB\Contracts\WajibPajakService;
+use Mdigi\PBB\Helpers\Options;
 use Mdigi\PBB\Services\BangunanServiceImpl;
 use Mdigi\PBB\Services\KecamatanServiceImpl;
 use Mdigi\PBB\Services\KelurahanServiceImpl;
@@ -28,7 +29,12 @@ class PBBServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'pbb');
+        if (Options::isConfigPublished()) {
+            $this->mergeConfigFrom(config_path('pbb.php'), 'pbb');
+        } else {
+            $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'pbb');
+        }
+
         $this->registerServices();
     }
 
@@ -37,24 +43,29 @@ class PBBServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config('pbb.php'),
-            ], 'config');
+            ], 'pbb-config');
 
             $this->publishes([
                 __DIR__ . '/../database/migrations/CreateTable.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_table.php'),
-            ], 'migrations');
+            ], 'pbb-migrations');
 
 
             $this->publishes([
-                __DIR__ . '/../resources/views' => resource_path('views/vendor/pbb'),
-            ], 'views');
+                __DIR__ . '/../resources/views' => resource_path('views/vendor/mdigi/pbb'),
+            ], 'pbb-views');
 
             $this->publishes([
                 __DIR__ . '/../database/seeders/TableSeeder.php' => database_path('seeders/TableSeeder.php'),
-            ], 'seeders');
+            ], 'pbb-seeders');
         }
 
         $this->registerRoutes();
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'pbb');
+        if (Options::isViewsPublished()) {
+            $this->loadViewsFrom(resource_path(Options::VIEWS_PATH), 'pbb');
+        } else {
+            $this->loadViewsFrom(__DIR__ . '/../resources/views', 'pbb');
+        }
+
     }
 
     protected function registerServices()
