@@ -4,9 +4,9 @@
 namespace Mdigi\PBB\Services;
 
 
-use Mdigi\PBB\Models\LookupItem;
-use Mdigi\PBB\Dtos\LookupItem as LookupItemDto;
 use Mdigi\PBB\Contracts\LookupItemService;
+use Mdigi\PBB\Dtos\LookupItem as LookupItemDto;
+use Mdigi\PBB\Models\LookupItem;
 
 class LookupItemServiceImpl implements LookupItemService
 {
@@ -73,7 +73,7 @@ class LookupItemServiceImpl implements LookupItemService
     private function getLookUpItem($kodeGroup, $kodeItem = null)
     {
         $lookupItem = LookupItem::where('kd_lookup_group', $kodeGroup);
-        $lookupItem = $kodeItem ? $lookupItem->where('kd_lookup_item', $kodeItem) : $lookupItem;
-        return $kodeItem ? new LookupItemDto($lookupItem->first()) : $lookupItem->get()->mapInto(LookupItemDto::class);
+        $lookupItem = $kodeItem !== null ? $lookupItem->where('kd_lookup_item', $kodeItem) : $lookupItem;
+        return $lookupItem->get()->count() > 1 ? $lookupItem->get()->mapInto(LookupItemDto::class) : new LookupItemDto($lookupItem->firstOrFail());
     }
 }
