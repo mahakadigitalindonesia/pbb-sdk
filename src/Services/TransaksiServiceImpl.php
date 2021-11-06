@@ -31,6 +31,11 @@ class TransaksiServiceImpl implements TransaksiService
         return new Transaksi($data->firstOrFail());
     }
 
+    public function isNOPHasUnpaid(NOP $nop)
+    {
+        return $this->getQuery($nop)->whereNull(Pembayaran::tanggalPembayaran)->count() > 0;
+    }
+
     public function getQuery(NOP $nop)
     {
         return Ketetapan::select([
