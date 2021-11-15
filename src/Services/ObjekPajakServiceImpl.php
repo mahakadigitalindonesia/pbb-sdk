@@ -4,9 +4,13 @@
 namespace Mdigi\PBB\Services;
 
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Mdigi\PBB\Contracts\LookupItemService;
 use Mdigi\PBB\Contracts\ObjekPajakService;
+use Mdigi\PBB\Domains\DataObjekPajak;
 use Mdigi\PBB\Dtos\NOP;
 use Mdigi\PBB\Dtos\ObjekPajak as ObjekPajakDto;
 use Mdigi\PBB\Helpers\OPColumns;
@@ -14,6 +18,7 @@ use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Models\Kecamatan;
 use Mdigi\PBB\Models\Kelurahan;
 use Mdigi\PBB\Models\LookupItem;
+use Mdigi\PBB\Models\ObjekBumi;
 use Mdigi\PBB\Models\ObjekPajak;
 use Mdigi\PBB\Models\Tanah;
 
@@ -70,5 +75,53 @@ class ObjekPajakServiceImpl implements ObjekPajakService
             ->where(OPColumns::nomorUrut, $nop->nomorUrut)
             ->where(OPColumns::kodeJenis, $nop->kodeJenis);
         return (int)$data->count();
+    }
+
+    public function save(DataObjekPajak $objekPajak)
+    {
+        DB::transaction(function () use ($objekPajak) {
+            $keys = [
+                OPColumns::kodeProvinsi => $objekPajak->getKodeProvinsi(),
+                OPColumns::kodeDati => $objekPajak->getKodeDati(),
+                OPColumns::kodeKecamatan => $objekPajak->getKodeKecamatan(),
+                OPColumns::kodeKelurahan => $objekPajak->getKodeKelurahan(),
+                OPColumns::kodeBlok => $objekPajak->getKodeBlok(),
+                OPColumns::nomorUrut => $objekPajak->getNomorUrut(),
+                OPColumns::kodeJenis => $objekPajak->getKodeJenis()
+            ];
+            ObjekPajak::updateOrCreate($keys, [
+                'subjek_pajak_id' => Str::limit($objekPajak->getWajibPajakId(), 30, ''),
+                'no_formulir_spop' => $objekPajak->getNomorFormulirSPOP(),
+                'no_persil' => Str::limit($objekPajak->getNomorSertifikat(), 5, ''),
+                'jalan_op' => Str::limit($objekPajak->getJalan(), 30, ''),
+                'blok_kav_no_op' => Str::limit($objekPajak->getBlokKavlingNomor(), 15, ''),
+                'rw_op' => Str::limit($objekPajak->getRw(), 2, ''),
+                'rt_op' => Str::limit($objekPajak->getRt(), 3, ''),
+                'kd_status_cabang' => 0,
+                'kd_status_wp' => $objekPajak->getKodeKepemilikan(),
+                'total_luas_bumi' => $objekPajak->getLuasTanah(),
+                'total_luas_bng' => 0,
+                'njop_bumi' => 0,
+                'njop_bng' => 0,
+                'status_peta_op' => 0,
+                'jenis_transaksi_op' => $objekPajak->getJenisTransaksi(),
+                'tgl_pendataan_op' => $objekPajak->getTanggalPendataan(),
+                'nip_pendata' => $objekPajak->getNipPendata(),
+                'tgl_pemeriksaan_op' => $objekPajak->getTanggalPemeriksaan(),
+                'nip_pemeriksa_op' => $objekPajak->getNipPemeriksa(),
+                'tgl_perekaman_op' => Carbon::now(),
+                'nip_perekam_op' => $objekPajak->getNipPerekam(),
+            ]);
+
+            ObjekBumi::updateOrCreate(Arr::add($keys, 'no_bumi', 1),
+                [
+                    'kd_znt' => Str::limit($objekPajak->getKodeZonaNilaiTanah(), 2, ''),
+                    'luas_bumi' => $objekPajak->getLuasTanah(),
+                    'jns_bumi' => $objekPajak->getJenisTanah(),
+                ]);
+
+        });
+
+        return $this->findByNOP(new NOP($objekPajak->getKodeProvinsi(), $objekPajak->getKodeDati(), $objekPajak->getKodeKecamatan(), $objekPajak->getKodeKelurahan(), $objekPajak->getKodeBlok(), $objekPajak->getNomorUrut(), $objekPajak->getKodeJenis()));
     }
 }
