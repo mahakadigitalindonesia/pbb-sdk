@@ -42,7 +42,7 @@ class PBBServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config('pbb.php'),
+                __DIR__ . '/../config/config.php' => config_path('pbb.php'),
             ], 'pbb-config');
 
             $this->publishes([
