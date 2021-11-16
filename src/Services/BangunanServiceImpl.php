@@ -55,7 +55,7 @@ class BangunanServiceImpl implements BangunanService
 
     public function save(DataBangunan $bangunan)
     {
-        DB::transaction(function () use ($bangunan) {
+        DB::connection(config('pbb.database.connection'))->transaction(function () use ($bangunan) {
             $keys = [
                 OPColumns::kodeProvinsi => $bangunan->getKodeProvinsi(),
                 OPColumns::kodeDati => $bangunan->getKodeDati(),
@@ -67,7 +67,7 @@ class BangunanServiceImpl implements BangunanService
                 'no_bng' => $bangunan->getNomor(),
             ];
 
-            DB::table(Bangunan::table)->updateOrInsert($keys, [
+            DB::connection(config('pbb.database.connection'))->table(Bangunan::table)->updateOrInsert($keys, [
                 'kd_jpb' => $bangunan->getKodeJPB(),
                 'no_formulir_lspop' => $bangunan->getNomorFormulirLSPOP(),
                 'thn_dibangun_bng' => $bangunan->getTahunDibangun(),
@@ -110,7 +110,7 @@ class BangunanServiceImpl implements BangunanService
 
     private function saveFasilitas($keys, $kodeFasilitas, $jumlahSatuan)
     {
-        DB::table(FasilitasBangunan::table)->updateOrInsert(Arr::add($keys, 'kd_fasilitas', $kodeFasilitas), [
+        DB::connection(config('pbb.database.connection'))->table(FasilitasBangunan::table)->updateOrInsert(Arr::add($keys, 'kd_fasilitas', $kodeFasilitas), [
             'jml_satuan' => $jumlahSatuan
         ]);
     }

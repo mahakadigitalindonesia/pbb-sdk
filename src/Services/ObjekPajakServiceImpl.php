@@ -79,7 +79,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
 
     public function save(DataObjekPajak $objekPajak)
     {
-        DB::transaction(function () use ($objekPajak) {
+        DB::connection(config('pbb.database.connection'))->transaction(function () use ($objekPajak) {
             $keys = [
                 OPColumns::kodeProvinsi => $objekPajak->getKodeProvinsi(),
                 OPColumns::kodeDati => $objekPajak->getKodeDati(),
@@ -89,7 +89,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 OPColumns::nomorUrut => $objekPajak->getNomorUrut(),
                 OPColumns::kodeJenis => $objekPajak->getKodeJenis()
             ];
-            DB::table(ObjekPajak::table)->updateOrInsert($keys, [
+            DB::connection(config('pbb.database.connection'))->table(ObjekPajak::table)->updateOrInsert($keys, [
                 'subjek_pajak_id' => Str::padRight($objekPajak->getWajibPajakId(), 30),
                 'no_formulir_spop' => $objekPajak->getNomorFormulirSPOP(),
                 'no_persil' => Str::limit($objekPajak->getNomorSertifikat(), 5, ''),
@@ -113,7 +113,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 'nip_perekam_op' => $objekPajak->getNipPerekam(),
             ]);
 
-            DB::table(ObjekBumi::table)->updateOrInsert(Arr::add($keys, 'no_bumi', 1), [
+            DB::connection(config('pbb.database.connection'))->table(ObjekBumi::table)->updateOrInsert(Arr::add($keys, 'no_bumi', 1), [
                 'kd_znt' => Str::limit($objekPajak->getKodeZonaNilaiTanah(), 2, ''),
                 'luas_bumi' => $objekPajak->getLuasTanah(),
                 'jns_bumi' => $objekPajak->getJenisTanah(),
