@@ -12,7 +12,9 @@ class FasilitasBangunan extends Model
 {
     use HasFactory, ConfigurableDatabaseConnection;
 
-    protected $table = 'dat_fasilitas_bangunan';
+    public const table = 'dat_fasilitas_bangunan';
+
+    protected $table = self::table;
     protected $guarded = [];
     protected $keyType = 'string';
     protected $primaryKey = 'no_bng';

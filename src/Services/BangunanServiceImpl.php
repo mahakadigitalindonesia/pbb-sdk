@@ -67,7 +67,7 @@ class BangunanServiceImpl implements BangunanService
                 'no_bng' => $bangunan->getNomor(),
             ];
 
-            Bangunan::updateOrCreate($keys, [
+            DB::table(Bangunan::table)->updateOrInsert($keys, [
                 'kd_jpb' => $bangunan->getKodeJPB(),
                 'no_formulir_lspop' => $bangunan->getNomorFormulirLSPOP(),
                 'thn_dibangun_bng' => $bangunan->getTahunDibangun(),
@@ -110,7 +110,7 @@ class BangunanServiceImpl implements BangunanService
 
     private function saveFasilitas($keys, $kodeFasilitas, $jumlahSatuan)
     {
-        FasilitasBangunan::updateOrCreate(Arr::add($keys, 'kd_fasilitas', $kodeFasilitas), [
+        DB::table(FasilitasBangunan::table)->updateOrInsert(Arr::add($keys, 'kd_fasilitas', $kodeFasilitas), [
             'jml_satuan' => $jumlahSatuan
         ]);
     }

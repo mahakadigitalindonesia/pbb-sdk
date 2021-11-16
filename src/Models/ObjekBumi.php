@@ -12,7 +12,8 @@ class ObjekBumi extends Model
 {
     use HasFactory, ConfigurableDatabaseConnection;
 
-    protected $table = 'dat_op_bumi';
+    public const table = 'dat_op_bumi';
+    protected $table = self::table;
     protected $guarded = [];
     protected $primaryKey = 'no_bumi';
     protected $keyType = 'string';

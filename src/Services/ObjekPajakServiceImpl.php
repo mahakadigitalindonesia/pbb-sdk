@@ -89,7 +89,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 OPColumns::nomorUrut => $objekPajak->getNomorUrut(),
                 OPColumns::kodeJenis => $objekPajak->getKodeJenis()
             ];
-            ObjekPajak::updateOrCreate($keys, [
+            DB::table(ObjekPajak::table)->updateOrInsert($keys, [
                 'subjek_pajak_id' => Str::padRight($objekPajak->getWajibPajakId(), 30),
                 'no_formulir_spop' => $objekPajak->getNomorFormulirSPOP(),
                 'no_persil' => Str::limit($objekPajak->getNomorSertifikat(), 5, ''),
@@ -113,13 +113,11 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 'nip_perekam_op' => $objekPajak->getNipPerekam(),
             ]);
 
-            ObjekBumi::updateOrCreate(Arr::add($keys, 'no_bumi', 1),
-                [
-                    'kd_znt' => Str::limit($objekPajak->getKodeZonaNilaiTanah(), 2, ''),
-                    'luas_bumi' => $objekPajak->getLuasTanah(),
-                    'jns_bumi' => $objekPajak->getJenisTanah(),
-                ]);
-
+            DB::table(ObjekBumi::table)->updateOrInsert(Arr::add($keys, 'no_bumi', 1), [
+                'kd_znt' => Str::limit($objekPajak->getKodeZonaNilaiTanah(), 2, ''),
+                'luas_bumi' => $objekPajak->getLuasTanah(),
+                'jns_bumi' => $objekPajak->getJenisTanah(),
+            ]);
         });
 
         return $this->findByNOP(new NOP($objekPajak->getKodeProvinsi(), $objekPajak->getKodeDati(), $objekPajak->getKodeKecamatan(), $objekPajak->getKodeKelurahan(), $objekPajak->getKodeBlok(), $objekPajak->getNomorUrut(), $objekPajak->getKodeJenis()));
