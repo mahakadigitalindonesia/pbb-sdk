@@ -90,7 +90,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 OPColumns::kodeJenis => $objekPajak->getKodeJenis()
             ];
             ObjekPajak::updateOrCreate($keys, [
-                'subjek_pajak_id' => Str::limit($objekPajak->getWajibPajakId(), 30, ''),
+                'subjek_pajak_id' => Str::padRight($objekPajak->getWajibPajakId(), 30),
                 'no_formulir_spop' => $objekPajak->getNomorFormulirSPOP(),
                 'no_persil' => Str::limit($objekPajak->getNomorSertifikat(), 5, ''),
                 'jalan_op' => Str::limit($objekPajak->getJalan(), 30, ''),
