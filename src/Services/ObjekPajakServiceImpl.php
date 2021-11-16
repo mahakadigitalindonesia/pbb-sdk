@@ -17,6 +17,7 @@ use Mdigi\PBB\Helpers\OPColumns;
 use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Models\Kecamatan;
 use Mdigi\PBB\Models\Kelurahan;
+use Mdigi\PBB\Models\Kota;
 use Mdigi\PBB\Models\LookupItem;
 use Mdigi\PBB\Models\ObjekBumi;
 use Mdigi\PBB\Models\ObjekPajak;
@@ -79,15 +80,16 @@ class ObjekPajakServiceImpl implements ObjekPajakService
 
     public function save(DataObjekPajak $objekPajak)
     {
-        DB::connection(config('pbb.database.connection'))->transaction(function () use ($objekPajak) {
+        $kota = Kota::query()->first();
+        DB::connection(config('pbb.database.connection'))->transaction(function () use ($objekPajak, $kota) {
             $keys = [
-                OPColumns::kodeProvinsi => $objekPajak->getKodeProvinsi(),
-                OPColumns::kodeDati => $objekPajak->getKodeDati(),
+                OPColumns::kodeProvinsi => $objekPajak->getKodeProvinsi() ?? $kota->kd_propinsi,
+                OPColumns::kodeDati => $objekPajak->getKodeDati() ?? $kota->kd_dati2,
                 OPColumns::kodeKecamatan => $objekPajak->getKodeKecamatan(),
                 OPColumns::kodeKelurahan => $objekPajak->getKodeKelurahan(),
                 OPColumns::kodeBlok => $objekPajak->getKodeBlok(),
                 OPColumns::nomorUrut => $objekPajak->getNomorUrut(),
-                OPColumns::kodeJenis => $objekPajak->getKodeJenis()
+                OPColumns::kodeJenis => $objekPajak->getKodeJenis() ?? '0',
             ];
             DB::connection(config('pbb.database.connection'))->table(ObjekPajak::table)->updateOrInsert($keys, [
                 'subjek_pajak_id' => Str::padRight($objekPajak->getWajibPajakId(), 30),
@@ -113,11 +115,12 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 'nip_perekam_op' => $objekPajak->getNipPerekam(),
             ]);
 
-            DB::connection(config('pbb.database.connection'))->table(ObjekBumi::table)->updateOrInsert(Arr::add($keys, 'no_bumi', 1), [
-                'kd_znt' => Str::limit($objekPajak->getKodeZonaNilaiTanah(), 2, ''),
-                'luas_bumi' => $objekPajak->getLuasTanah(),
-                'jns_bumi' => $objekPajak->getJenisTanah(),
-            ]);
+            DB::connection(config('pbb.database.connection'))->table(ObjekBumi::table)
+                ->updateOrInsert(Arr::add($keys, 'no_bumi', 1), [
+                    'kd_znt' => Str::limit($objekPajak->getKodeZonaNilaiTanah(), 2, ''),
+                    'luas_bumi' => $objekPajak->getLuasTanah(),
+                    'jns_bumi' => $objekPajak->getJenisTanah(),
+                ]);
         });
 
         return $this->findByNOP(new NOP($objekPajak->getKodeProvinsi(), $objekPajak->getKodeDati(), $objekPajak->getKodeKecamatan(), $objekPajak->getKodeKelurahan(), $objekPajak->getKodeBlok(), $objekPajak->getNomorUrut(), $objekPajak->getKodeJenis()));
@@ -138,7 +141,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
 
     public function findLastNOPinBlok($kodeKecamatan, $kodeKelurahan, $kodeBlok)
     {
-        $lastNOP = (int) ObjekPajak::query()
+        $lastNOP = (int)ObjekPajak::query()
             ->where(OPColumns::kodeKecamatan, $kodeKecamatan)
             ->where(OPColumns::kodeKelurahan, $kodeKelurahan)
             ->where(OPColumns::kodeBlok, $kodeBlok)
