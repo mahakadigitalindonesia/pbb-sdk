@@ -47,7 +47,7 @@ class WajibPajakServiceImpl implements WajibPajakService
             'blok_kav_no_wp' => Str::limit($subjekPajak->getBlokKavlingNomor(), 15, ''),
             'rw_wp' => Str::limit($subjekPajak->getRw(), 2, ''),
             'rt_wp' => Str::limit($subjekPajak->getRw(), 3, ''),
-            'kelurahan' => Str::limit($subjekPajak->getKelurahan(), 30, ''),
+            'kelurahan_wp' => Str::limit($subjekPajak->getKelurahan(), 30, ''),
             'kota_wp' => Str::limit($subjekPajak->getKota(), 30, ''),
             'kd_pos_wp' => Str::limit($subjekPajak->getKodePos(), 5, ''),
             'telp_wp' => Str::limit($subjekPajak->getTelepon(), 20, ''),
