@@ -54,6 +54,6 @@ class WajibPajakServiceImpl implements WajibPajakService
             'npwp' => Str::limit($subjekPajak->getNpwp(), 15, ''),
             'status_pekerjaan_wp' => Str::limit($subjekPajak->getStatusPekerjaan(), 1, '')
         ]);
-        return $this->findById($saved->id);
+        return $this->findById($saved->subjek_pajak_id);
     }
 }
