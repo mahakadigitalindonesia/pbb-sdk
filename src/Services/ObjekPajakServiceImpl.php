@@ -135,4 +135,16 @@ class ObjekPajakServiceImpl implements ObjekPajakService
             ->where(OPColumns::kodeJenis, $nop->kodeJenis)
             ->delete();
     }
+
+    public function findLastNOPinBlok($kodeKecamatan, $kodeKelurahan, $kodeBlok)
+    {
+        $lastNOP = (int) ObjekPajak::query()
+            ->where(OPColumns::kodeKecamatan, $kodeKecamatan)
+            ->where(OPColumns::kodeKelurahan, $kodeKelurahan)
+            ->where(OPColumns::kodeBlok, $kodeBlok)
+            ->lockForUpdate()
+            ->get()
+            ->max(OPColumns::nomorUrut);
+        return Str::padLeft((string)($lastNOP + 1), 4, '0');
+    }
 }
