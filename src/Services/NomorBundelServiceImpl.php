@@ -31,13 +31,12 @@ class NomorBundelServiceImpl implements NomorBundelService
                 'temp_urut_bundel' => '001',
             ]);
         throw_if($bundel->get()->isEmpty(), new ModelNotFoundException());
-        $bundel->temp_no_bundel = ((int)$bundel->temp_no_bundel === 1) ? $bundel->temp_no_bundel : Str::padLeft((string)((int)$bundel->temp_no_bundel + 1), 4, '0');
         $bundel->temp_urut_bundel = ((int)$bundel->temp_urut_bundel === 1) ? $bundel->temp_no_bundel : Str::padLeft((string)((int)$bundel->temp_urut_bundel + 1), 3, '0');
         if ((int)$bundel->temp_urut_bundel > 999) {
             $bundel->temp_no_bundel = Str::padLeft((string)((int)$bundel->temp_no_bundel + 1), 4, '0');
             $bundel->temp_urut_bundel = '001';
         }
-        return new NomorBundelDto($bundel->first());
+        return new NomorBundelDto($bundel);
     }
 
     public function updateOrCreate($year, $nomorBundel, $nomorUrut)
