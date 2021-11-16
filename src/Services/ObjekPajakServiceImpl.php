@@ -104,7 +104,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 'njop_bumi' => 0,
                 'njop_bng' => 0,
                 'status_peta_op' => 0,
-                'jenis_transaksi_op' => $objekPajak->getJenisTransaksi(),
+                'jns_transaksi_op' => $objekPajak->getJenisTransaksi(),
                 'tgl_pendataan_op' => $objekPajak->getTanggalPendataan(),
                 'nip_pendata' => $objekPajak->getNipPendata(),
                 'tgl_pemeriksaan_op' => $objekPajak->getTanggalPemeriksaan(),
