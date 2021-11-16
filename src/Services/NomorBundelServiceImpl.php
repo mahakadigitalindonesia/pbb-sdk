@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Mdigi\PBB\Contracts\NomorBundelService;
 use Mdigi\PBB\Dtos\NomorBundel as NomorBundelDto;
+use Mdigi\PBB\Helpers\DatabaseSwitch;
 use Mdigi\PBB\Models\Kantor;
 use Mdigi\PBB\Models\NomorBundel;
 
@@ -23,7 +24,7 @@ class NomorBundelServiceImpl implements NomorBundelService
             ->orderByDesc('temp_urut_bundel')
             ->lockForUpdate()->firstOrCreate([
                 'kd_kanwil' => $kantor->kd_kanwil,
-                'kd_kantor' => $kantor->kd_kantor,
+                DatabaseSwitch::kodeKantor() => $kantor->{DatabaseSwitch::kodeKantor()},
                 'temp_thn_bundel' => $year
             ], [
                 'temp_no_bundel' => '0001',
@@ -44,7 +45,7 @@ class NomorBundelServiceImpl implements NomorBundelService
         $kantor = Kantor::query()->firstOrFail();
         $bundel = NomorBundel::updateOrCreate([
             'kd_kanwil' => $kantor->kd_kanwil,
-            'kd_kantor' => $kantor->kd_kantor,
+            DatabaseSwitch::kodeKantor() => $kantor->{DatabaseSwitch::kodeKantor()},
             'temp_thn_bundel' => $year,
             'temp_no_bundel' => $nomorBundel
         ], [
