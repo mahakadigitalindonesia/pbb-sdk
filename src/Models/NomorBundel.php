@@ -12,6 +12,7 @@ class NomorBundel extends Model
 {
     use HasFactory, ConfigurableDatabaseConnection;
     protected $keyType = 'string';
+    protected $primaryKey = 'temp_no_bundel';
     public $incrementing = false;
     public $timestamps = false;
 

@@ -28,7 +28,10 @@ class ObjekPajak extends Model
     public const kodeKepemilikan = self::table . '.kd_status_wp';
 
     protected $table = self::table;
-
     protected $guarded = [];
+    protected $keyType = 'string';
+    protected $primaryKey = 'no_formulir_spop';
+    public $incrementing = false;
+    public $timestamps = false;
 
 }

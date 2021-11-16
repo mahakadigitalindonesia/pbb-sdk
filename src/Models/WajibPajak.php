@@ -19,4 +19,8 @@ class WajibPajak extends Model
     protected $table = self::table;
 
     protected $guarded = [];
+    protected $keyType = 'string';
+    protected $primaryKey = 'subjek_pajak_id';
+    public $incrementing = false;
+    public $timestamps = false;
 }

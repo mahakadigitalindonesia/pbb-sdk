@@ -13,4 +13,9 @@ class ObjekBumi extends Model
     use HasFactory, ConfigurableDatabaseConnection;
 
     protected $table = 'dat_op_bumi';
+    protected $guarded = [];
+    protected $primaryKey = 'no_bumi';
+    protected $keyType = 'string';
+    public $incrementing = false;
+    public $timestamps = false;
 }
