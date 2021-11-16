@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Mdigi\PBB\Contracts\NomorBundelService;
+use Mdigi\PBB\Dtos\NomorBundel as NomorBundelDto;
 use Mdigi\PBB\Models\Kantor;
 use Mdigi\PBB\Models\NomorBundel;
 
@@ -35,13 +36,13 @@ class NomorBundelServiceImpl implements NomorBundelService
             $bundel->temp_no_bundel = Str::padLeft((string)((int)$bundel->temp_no_bundel + 1), 4, '0');
             $bundel->temp_urut_bundel = '001';
         }
-        return $bundel;
+        return new NomorBundelDto($bundel->first());
     }
 
     public function updateOrCreate($year, $nomorBundel, $nomorUrut)
     {
         $kantor = Kantor::query()->firstOrFail();
-        return NomorBundel::updateOrCreate([
+        $bundel = NomorBundel::updateOrCreate([
             'kd_kanwil' => $kantor->kd_kanwil,
             'kd_kantor' => $kantor->kd_kantor,
             'temp_thn_bundel' => $year,
@@ -49,5 +50,6 @@ class NomorBundelServiceImpl implements NomorBundelService
         ], [
             'temp_urut_bundel' => $nomorUrut
         ]);
+        return new NomorBundelDto($bundel);
     }
 }
