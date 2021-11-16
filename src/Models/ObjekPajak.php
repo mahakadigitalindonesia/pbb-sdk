@@ -29,4 +29,6 @@ class ObjekPajak extends Model
 
     protected $table = self::table;
 
+    protected $guarded = [];
+
 }

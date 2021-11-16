@@ -13,4 +13,6 @@ class FasilitasBangunan extends Model
     use HasFactory, ConfigurableDatabaseConnection;
 
     protected $table = 'dat_fasilitas_bangunan';
+
+    protected $guarded = [];
 }

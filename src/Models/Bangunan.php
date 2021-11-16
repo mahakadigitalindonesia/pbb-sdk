@@ -15,4 +15,6 @@ class Bangunan extends Model
     public const table = 'dat_op_bangunan';
 
     protected $table = self::table;
+
+    protected $guarded = [];
 }

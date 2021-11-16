@@ -16,4 +16,6 @@ class NomorBundel extends Model
     public $timestamps = false;
 
     protected $table = 'temp_max_bundel';
+
+    protected $guarded = [];
 }

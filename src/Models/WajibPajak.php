@@ -17,4 +17,6 @@ class WajibPajak extends Model
     public const statusPekerjaan = self::table. '.status_pekerjaan_wp';
     public const nama = self::table. '.nm_wp';
     protected $table = self::table;
+
+    protected $guarded = [];
 }
