@@ -122,4 +122,17 @@ class ObjekPajakServiceImpl implements ObjekPajakService
 
         return $this->findByNOP(new NOP($objekPajak->getKodeProvinsi(), $objekPajak->getKodeDati(), $objekPajak->getKodeKecamatan(), $objekPajak->getKodeKelurahan(), $objekPajak->getKodeBlok(), $objekPajak->getNomorUrut(), $objekPajak->getKodeJenis()));
     }
+
+    public function delete(NOP $nop)
+    {
+        DB::connection(config('pbb.database.connection'))->table(ObjekPajak::table)
+            ->where(OPColumns::kodeProvinsi, $nop->kodeProvinsi)
+            ->where(OPColumns::kodeDati, $nop->kodeDati)
+            ->where(OPColumns::kodeKecamatan, $nop->kodeKecamatan)
+            ->where(OPColumns::kodeKelurahan, $nop->kodeKelurahan)
+            ->where(OPColumns::kodeBlok, $nop->kodeBlok)
+            ->where(OPColumns::nomorUrut, $nop->nomorUrut)
+            ->where(OPColumns::kodeJenis, $nop->kodeJenis)
+            ->delete();
+    }
 }

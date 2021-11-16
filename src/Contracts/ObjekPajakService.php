@@ -11,4 +11,6 @@ interface ObjekPajakService
     public function findByNOP(NOP $nop);
 
     public function save(DataObjekPajak $objekPajak);
+
+    public function delete(NOP $nop);
 }
