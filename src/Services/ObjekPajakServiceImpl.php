@@ -123,7 +123,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 ]);
         });
 
-        return $this->findByNOP(new NOP($objekPajak->getKodeProvinsi(), $objekPajak->getKodeDati(), $objekPajak->getKodeKecamatan(), $objekPajak->getKodeKelurahan(), $objekPajak->getKodeBlok(), $objekPajak->getNomorUrut(), $objekPajak->getKodeJenis()));
+        return $this->findByNOP(new NOP($objekPajak->getKodeProvinsi() ?? $kota->kd_propinsi, $objekPajak->getKodeDati() ?? $kota->kd_dati2, $objekPajak->getKodeKecamatan(), $objekPajak->getKodeKelurahan(), $objekPajak->getKodeBlok(), $objekPajak->getNomorUrut(), $objekPajak->getKodeJenis()));
     }
 
     public function delete(NOP $nop)
