@@ -167,7 +167,7 @@ class BangunanServiceImpl implements BangunanService
         $panjangPagar = $this->getFasilitas($nop, $item->no_bng, [
             Fasilitas::PAGAR[BahanPagar::BAJA_BESI],
             Fasilitas::PAGAR[BahanPagar::BATA_BATAKO],
-        ]);
+        ])->first();
         $item->panjang_pagar = $panjangPagar ? $panjangPagar->jml_satuan : '-';
         return new BangunanDto($item);
     }
