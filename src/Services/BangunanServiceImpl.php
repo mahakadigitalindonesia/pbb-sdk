@@ -195,6 +195,10 @@ class BangunanServiceImpl implements BangunanService
 
         $langit = $this->getLookupItem(LookupItemType::LANGIT, $item->kd_langit_langit);
         $item->langit = $langit ? $langit->nm_lookup_item : '-';
+
+        $jenisTransaksi = $this->getLookupItem(LookupItemType::TRANSAKSI_LSPOP, $item->jns_transaksi_bng);
+        $item->jenis_transaksi = $jenisTransaksi ? $jenisTransaksi->nm_lookup_item : '-';
+
         return new BangunanDto($item);
     }
 
