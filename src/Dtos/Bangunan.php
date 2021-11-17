@@ -10,7 +10,7 @@ class Bangunan extends ObjekPajakKeys
     public $nomor;
     public $kodeJPB;
     public $jenisPenggunaan;
-    public $nomorFormulirLPOP;
+    public $nomorFormulirLSPOP;
     public $tahunDibangun;
     public $tahunRenovasi;
     public $luas;
@@ -41,7 +41,7 @@ class Bangunan extends ObjekPajakKeys
         $this->nomor = $model->no_bng;
         $this->kodeJPB = $model->kd_jpb;
         $this->jenisPenggunaan = $model->nama_jpb;
-        $this->nomorFormulirLPOP = $model->no_formulir_lspop;
+        $this->nomorFormulirLSPOP = $model->no_formulir_lspop;
         $this->tahunDibangun = $model->thn_dibangun_bng;
         $this->tahunRenovasi = $model->thn_renovasi_bng;
         $this->luas = $model->luas_bng;
