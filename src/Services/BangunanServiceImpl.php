@@ -16,10 +16,12 @@ use Mdigi\PBB\Dtos\PenggunaanBangunan as PenggunaanBangunanDto;
 use Mdigi\PBB\Helpers\BahanPagar;
 use Mdigi\PBB\Helpers\Fasilitas;
 use Mdigi\PBB\Helpers\KolamRenang;
+use Mdigi\PBB\Helpers\LookupItemType;
 use Mdigi\PBB\Helpers\OPColumns;
 use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Models\FasilitasBangunan;
 use Mdigi\PBB\Models\Kota;
+use Mdigi\PBB\Models\LookupItem;
 use Mdigi\PBB\Models\PenggunaanBangunan;
 
 class BangunanServiceImpl implements BangunanService
@@ -149,6 +151,7 @@ class BangunanServiceImpl implements BangunanService
      */
     private function mapBangunan(NOP $nop, $item): BangunanDto
     {
+        // Populate Data Fasilitas
         $listrik = $this->getFasilitas($nop, $item->no_bng, Fasilitas::LISTRIK)->first();
         $item->listrik = ($listrik) ? $listrik->jml_satuan : '-';
 
@@ -162,13 +165,42 @@ class BangunanServiceImpl implements BangunanService
             Fasilitas::KOLAM_RENANG[KolamRenang::PLESTER],
             Fasilitas::KOLAM_RENANG[KolamRenang::PLESTER],
         ])->first();
-        $item->luas_kolam = $luasKolam ? $luasKolam->jml_satuah : '-';
+        $item->luas_kolam = $luasKolam ? $luasKolam->jml_satuan : '-';
 
         $panjangPagar = $this->getFasilitas($nop, $item->no_bng, [
             Fasilitas::PAGAR[BahanPagar::BAJA_BESI],
             Fasilitas::PAGAR[BahanPagar::BATA_BATAKO],
         ])->first();
+
+        // Populate Data JPB
         $item->panjang_pagar = $panjangPagar ? $panjangPagar->jml_satuan : '-';
+        $jpb = PenggunaanBangunan::query()->where('kd_jpb_jpt', $item->kd_jpb)->first();
+        $item->nama_jpb = $jpb ? $jpb->nm_jpb_jpt : '-';
+
+        // Populate Data Lookup Items
+        $kondisi = $this->getLookupItem(LookupItemType::KONDISI_UMUM, $item->kondisi_bng);
+        $item->kondisi = $kondisi ? $kondisi->nm_lookup_item : '-';
+
+        $konstruksi = $this->getLookupItem(LookupItemType::KONSTRUKSI, $item->jns_konstruksi_bng);
+        $item->konstruksi = $konstruksi ? $konstruksi->nm_lookup_item : '-';
+
+        $atap = $this->getLookupItem(LookupItemType::ATAP, $item->jns_atap_bng);
+        $item->atap = $atap ? $atap->nm_lookup_item : '-';
+
+        $dinding = $this->getLookupItem(LookupItemType::DINDING, $item->kd_dinding);
+        $item->dinding = $dinding ? $atap->nm_lookup_item : '-';
+
+        $lantai = $this->getLookupItem(LookupItemType::LANTAI, $item->kd_lantai);
+        $item->lantai = $lantai ? $atap->nm_lookup_item : '-';
+
+        $langit = $this->getLookupItem(LookupItemType::LANGIT, $item->kd_langit_langit);
+        $item->langit = $langit ? $atap->nm_lookup_item : '-';
         return new BangunanDto($item);
+    }
+
+    private function getLookupItem($kodeGroup, $kodeItem)
+    {
+        return LookupItem::query()->where(LookupItem::kodeGroup, $kodeGroup)
+            ->where(LookupItem::kodeItem, $kodeItem)->first();
     }
 }

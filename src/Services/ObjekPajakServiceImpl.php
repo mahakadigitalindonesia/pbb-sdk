@@ -8,11 +8,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Mdigi\PBB\Contracts\LookupItemService;
 use Mdigi\PBB\Contracts\ObjekPajakService;
 use Mdigi\PBB\Domains\DataObjekPajak;
 use Mdigi\PBB\Dtos\NOP;
 use Mdigi\PBB\Dtos\ObjekPajak as ObjekPajakDto;
+use Mdigi\PBB\Helpers\LookupItemType;
 use Mdigi\PBB\Helpers\OPColumns;
 use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Models\Kecamatan;
@@ -51,10 +51,10 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                     ->on(Kelurahan::kodeKelurahan, '=', ObjekPajak::kodeKelurahan);
             })->join(LookupItem::table . ' as t_kepemilikan', function ($join) {
                 $join->on('t_kepemilikan.kd_lookup_item', '=', ObjekPajak::kodeKepemilikan)
-                    ->where('t_kepemilikan.kd_lookup_group', '=', LookupItemService::KEPEMILIKAN);
+                    ->where('t_kepemilikan.kd_lookup_group', '=', LookupItemType::KEPEMILIKAN);
             })->join(LookupItem::table . ' as t_jenis_tanah', function ($join) {
                 $join->on('t_jenis_tanah.kd_lookup_item', '=', Tanah::kodeTanah)
-                    ->where('t_jenis_tanah.kd_lookup_group', '=', LookupItemService::TANAH);
+                    ->where('t_jenis_tanah.kd_lookup_group', '=', LookupItemType::TANAH);
             })->where(ObjekPajak::kodeProvinsi, $nop->kodeProvinsi)
             ->where(ObjekPajak::kodeDati, $nop->kodeDati)
             ->where(ObjekPajak::kodeKecamatan, $nop->kodeKecamatan)

@@ -6,10 +6,10 @@ namespace Mdigi\PBB\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Mdigi\PBB\Contracts\LookupItemService;
 use Mdigi\PBB\Contracts\WajibPajakService;
 use Mdigi\PBB\Domains\DataSubjekPajak;
 use Mdigi\PBB\Dtos\WajibPajak as WajibPajakDto;
+use Mdigi\PBB\Helpers\LookupItemType;
 use Mdigi\PBB\Models\Kecamatan;
 use Mdigi\PBB\Models\Kelurahan;
 use Mdigi\PBB\Models\LookupItem;
@@ -32,7 +32,7 @@ class WajibPajakServiceImpl implements WajibPajakService
             LookupItem::namaItem . ' as pekerjaan',
         ])->join(LookupItem::table, function ($join) {
             $join->on(LookupItem::kodeItem, '=', WajibPajak::statusPekerjaan)
-                ->where(LookupItem::kodeGroup, LookupItemService::PEKERJAAN);
+                ->where(LookupItem::kodeGroup, LookupItemType::PEKERJAAN);
         })->leftJoin(Kelurahan::table, Kelurahan::namaKelurahan, '=', WajibPajak::kelurahan)
             ->leftJoin(Kecamatan::table, Kecamatan::kodeKecamatan, '=', Kelurahan::kodeKecamatan);
     }
