@@ -188,13 +188,13 @@ class BangunanServiceImpl implements BangunanService
         $item->atap = $atap ? $atap->nm_lookup_item : '-';
 
         $dinding = $this->getLookupItem(LookupItemType::DINDING, $item->kd_dinding);
-        $item->dinding = $dinding ? $atap->nm_lookup_item : '-';
+        $item->dinding = $dinding ? $dinding->nm_lookup_item : '-';
 
         $lantai = $this->getLookupItem(LookupItemType::LANTAI, $item->kd_lantai);
-        $item->lantai = $lantai ? $atap->nm_lookup_item : '-';
+        $item->lantai = $lantai ? $lantai->nm_lookup_item : '-';
 
         $langit = $this->getLookupItem(LookupItemType::LANGIT, $item->kd_langit_langit);
-        $item->langit = $langit ? $atap->nm_lookup_item : '-';
+        $item->langit = $langit ? $langit->nm_lookup_item : '-';
         return new BangunanDto($item);
     }
 
