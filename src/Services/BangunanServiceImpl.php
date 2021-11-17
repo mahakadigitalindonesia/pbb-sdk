@@ -13,7 +13,9 @@ use Mdigi\PBB\Domains\DataBangunan;
 use Mdigi\PBB\Dtos\Bangunan as BangunanDto;
 use Mdigi\PBB\Dtos\NOP;
 use Mdigi\PBB\Dtos\PenggunaanBangunan as PenggunaanBangunanDto;
+use Mdigi\PBB\Helpers\BahanPagar;
 use Mdigi\PBB\Helpers\Fasilitas;
+use Mdigi\PBB\Helpers\KolamRenang;
 use Mdigi\PBB\Helpers\OPColumns;
 use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Models\FasilitasBangunan;
@@ -26,13 +28,15 @@ class BangunanServiceImpl implements BangunanService
     {
         $data = $this->getQuery($nop);
         throw_if($data->get()->isEmpty(), new ModelNotFoundException());
-        return $data->get()->mapInto(BangunanDto::class);
+        return $data->get()->map(function ($item) use ($nop) {
+            return $this->mapBangunan($nop, $item);
+        });
     }
 
     public function findByNOPAndNomor(NOP $nop, int $nomor)
     {
         $data = $this->getQuery($nop)->where('no_bng', $nomor);
-        return new BangunanDto($data->firstOrFail());
+        return $this->mapBangunan($nop, $data->firstOrFail());
     }
 
     public function penggunaanBangunan($kodeJPB = null)
@@ -52,6 +56,25 @@ class BangunanServiceImpl implements BangunanService
             ->where(OPColumns::kodeBlok, $nop->kodeBlok)
             ->where(OPColumns::nomorUrut, $nop->nomorUrut)
             ->where(OPColumns::kodeJenis, $nop->kodeJenis);
+    }
+
+    private function getFasilitas(NOP $nop, int $nomor, $kodeFasilitas = null)
+    {
+        $data = FasilitasBangunan::query()
+            ->where(OPColumns::kodeProvinsi, $nop->kodeProvinsi)
+            ->where(OPColumns::kodeDati, $nop->kodeDati)
+            ->where(OPColumns::kodeKecamatan, $nop->kodeKecamatan)
+            ->where(OPColumns::kodeKelurahan, $nop->kodeKelurahan)
+            ->where(OPColumns::kodeBlok, $nop->kodeBlok)
+            ->where(OPColumns::nomorUrut, $nop->nomorUrut)
+            ->where(OPColumns::kodeJenis, $nop->kodeJenis)
+            ->where('no_bng', $nomor);
+        if (is_array($kodeFasilitas)) {
+            $data = $data->whereIn('kd_fasilitas', $kodeFasilitas);
+        } else {
+            $data = ($kodeFasilitas) ? $data->where('kd_fasilitas', $kodeFasilitas) : $data;
+        }
+        return $data->get();
     }
 
     public function save(DataBangunan $bangunan)
@@ -117,5 +140,35 @@ class BangunanServiceImpl implements BangunanService
             ->updateOrInsert(Arr::add($keys, 'kd_fasilitas', $kodeFasilitas), [
                 'jml_satuan' => $jumlahSatuan
             ]);
+    }
+
+    /**
+     * @param NOP $nop
+     * @param $item
+     * @return BangunanDto
+     */
+    private function mapBangunan(NOP $nop, $item): BangunanDto
+    {
+        $listrik = $this->getFasilitas($nop, $item->no_bng, Fasilitas::LISTRIK)->first();
+        $item->listrik = ($listrik) ? $listrik->jml_satuan : '-';
+
+        $acSplit = $this->getFasilitas($nop, $item->no_bng, Fasilitas::AC_SPLIT)->first();
+        $item->ac_split = $acSplit ? $acSplit->jml_satuan : '-';
+
+        $acWindow = $this->getFasilitas($nop, $item->no_bng, Fasilitas::AC_WINDOWS)->first();
+        $item->ac_window = $acWindow ? $acWindow->jml_satuan : '-';
+
+        $luasKolam = $this->getFasilitas($nop, $item->no_bng, [
+            Fasilitas::KOLAM_RENANG[KolamRenang::PLESTER],
+            Fasilitas::KOLAM_RENANG[KolamRenang::PLESTER],
+        ])->first();
+        $item->luas_kolam = $luasKolam ? $luasKolam->jml_satuah : '-';
+
+        $panjangPagar = $this->getFasilitas($nop, $item->no_bng, [
+            Fasilitas::PAGAR[BahanPagar::BAJA_BESI],
+            Fasilitas::PAGAR[BahanPagar::BATA_BATAKO],
+        ]);
+        $item->panjang_pagar = $panjangPagar ? $panjangPagar->jml_satuan : '-';
+        return new BangunanDto($item);
     }
 }

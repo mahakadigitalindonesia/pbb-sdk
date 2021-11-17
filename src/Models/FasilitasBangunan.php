@@ -20,4 +20,9 @@ class FasilitasBangunan extends Model
     protected $primaryKey = 'no_bng';
     public $timestamps = false;
     public $incrementing = false;
+
+    public function fasilitas()
+    {
+        return $this->belongsTo(Fasilitas::class, 'kd_fasilitas', 'kd_fasilitas');
+    }
 }

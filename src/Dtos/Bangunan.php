@@ -9,7 +9,7 @@ class Bangunan extends ObjekPajakKeys
     public $nop;
     public $nomor;
     public $kodeJPB;
-    public $nomorFormulirSPOP;
+    public $nomorFormulirLPOP;
     public $tahunDibangun;
     public $tahunRenovasi;
     public $luas;
@@ -20,6 +20,11 @@ class Bangunan extends ObjekPajakKeys
     public $kodeDinding;
     public $kodeLantai;
     public $kodeLangit;
+    public $listrik;
+    public $acSplit;
+    public $acWindow;
+    public $luasKolam;
+    public $panjangPagar;
     public $jenisTransaksi;
 
     public function __construct($model = null)
@@ -28,7 +33,7 @@ class Bangunan extends ObjekPajakKeys
         $this->nop = (string)new NOP($model->kd_propinsi, $model->kd_dati2, $model->kd_kecamatan, $model->kd_kelurahan, $model->kd_blok, $model->no_urut, $model->kd_jns_op);
         $this->nomor = $model->no_bng;
         $this->kodeJPB = $model->kd_jpb;
-        $this->nomorFormulirSPOP = $model->no_formulir_lspop;
+        $this->nomorFormulirLPOP = $model->no_formulir_lspop;
         $this->tahunDibangun = $model->thn_dibangun_bng;
         $this->tahunRenovasi = $model->thn_renovasi_bng;
         $this->luas = $model->luas_bng;
@@ -39,6 +44,11 @@ class Bangunan extends ObjekPajakKeys
         $this->kodeDinding = $model->kd_dinding;
         $this->kodeLantai = $model->kd_lantai;
         $this->kodeLangit = $model->kd_langit_langit;
+        $this->listrik = $model->listrik;
+        $this->acSplit = $model->ac_split;
+        $this->acWindow = $model->ac_window;
+        $this->luasKolam = $model->luas_kolam;
+        $this->panjangPagar = $model->panjang_pagar;
         $this->jenisTransaksi = $model->jns_transaksi_bng;
     }
 }
