@@ -39,7 +39,7 @@ class WajibPajakServiceImpl implements WajibPajakService
 
     public function save(DataSubjekPajak $subjekPajak)
     {
-        $saved = WajibPajak::updateOrCreate([
+        WajibPajak::updateOrCreate([
             'subjek_pajak_id' => Str::padRight($subjekPajak->getId(), 30),
         ], [
             'nm_wp' => Str::limit($subjekPajak->getNama(), 30, ''),
@@ -54,6 +54,6 @@ class WajibPajakServiceImpl implements WajibPajakService
             'npwp' => Str::limit($subjekPajak->getNpwp(), 15, ''),
             'status_pekerjaan_wp' => Str::limit($subjekPajak->getStatusPekerjaan(), 1, '')
         ]);
-        return $this->findById($saved->subjek_pajak_id);
+        return $this->findById($subjekPajak->getId());
     }
 }
