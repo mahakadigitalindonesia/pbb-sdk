@@ -19,6 +19,16 @@ abstract class DatabaseSwitch
         self::SISMIOP => 'ref_jpb',
     ];
 
+    static $COLUMN_KD_JPB_MAP = [
+        self::SIMPBB => 'kd_jpb_jpt',
+        self::SISMIOP => 'kd_jpb',
+    ];
+
+    static $COLUMN_NM_JPB_MAP = [
+        self::SIMPBB => 'nm_jpb_jpt',
+        self::SISMIOP => 'nm_jpb',
+    ];
+
     public static function refKantor()
     {
         return 'ref_' . self::getKantor();
@@ -42,5 +52,15 @@ abstract class DatabaseSwitch
     public static function tableRefJPB()
     {
         return self::$TABLE_REF_JPB_MAP[config('pbb.database.type', self::SIMPBB)];
+    }
+
+    public static function columnKodeJPB()
+    {
+        return self::$COLUMN_KD_JPB_MAP[config('pbb.database.type', self::SIMPBB)];
+    }
+
+    public static function columnNamaJPB()
+    {
+        return self::$COLUMN_NM_JPB_MAP[config('pbb.database.type', self::SIMPBB)];
     }
 }

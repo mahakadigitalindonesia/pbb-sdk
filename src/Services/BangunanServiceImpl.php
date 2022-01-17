@@ -14,6 +14,7 @@ use Mdigi\PBB\Dtos\Bangunan as BangunanDto;
 use Mdigi\PBB\Dtos\NOP;
 use Mdigi\PBB\Dtos\PenggunaanBangunan as PenggunaanBangunanDto;
 use Mdigi\PBB\Helpers\BahanPagar;
+use Mdigi\PBB\Helpers\DatabaseSwitch;
 use Mdigi\PBB\Helpers\Fasilitas;
 use Mdigi\PBB\Helpers\KolamRenang;
 use Mdigi\PBB\Helpers\LookupItemType;
@@ -43,8 +44,11 @@ class BangunanServiceImpl implements BangunanService
 
     public function penggunaanBangunan($kodeJPB = null)
     {
-        $data = PenggunaanBangunan::query();
-        $data = $kodeJPB ? $data->where('kd_jpb_jpt', $kodeJPB) : $data;
+        $data = PenggunaanBangunan::query()->select([
+            DB::raw(DatabaseSwitch::columnKodeJPB() . ' as kd_jpb_jpt'),
+            DB::raw(DatabaseSwitch::columnNamaJPB() . ' as nm_jpb_jpt'),
+        ]);
+        $data = $kodeJPB ? $data->where(DatabaseSwitch::columnKodeJPB(), $kodeJPB) : $data;
         throw_if($data->get()->isEmpty(), new ModelNotFoundException());
         return $data->count() > 1 ? $data->get()->mapInto(PenggunaanBangunanDto::class) : new PenggunaanBangunanDto($data->firstOrFail());
     }
@@ -174,7 +178,11 @@ class BangunanServiceImpl implements BangunanService
 
         // Populate Data JPB
         $item->panjang_pagar = $panjangPagar ? $panjangPagar->jml_satuan : '-';
-        $jpb = PenggunaanBangunan::query()->where('kd_jpb_jpt', $item->kd_jpb)->first();
+        $jpb = PenggunaanBangunan::query()
+            ->select([
+                DB::raw(DatabaseSwitch::columnKodeJPB() . ' as kd_jpb_jpt'),
+                DB::raw(DatabaseSwitch::columnNamaJPB() . ' as nm_jpb_jpt'),
+            ])->where(DatabaseSwitch::columnKodeJPB(), $item->kd_jpb)->first();
         $item->nama_jpb = $jpb ? $jpb->nm_jpb_jpt : '-';
 
         // Populate Data Lookup Items
