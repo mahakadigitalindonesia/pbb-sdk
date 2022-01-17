@@ -6,6 +6,7 @@ namespace Mdigi\PBB\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Mdigi\PBB\Helpers\DatabaseSwitch;
 use Mdigi\PBB\Models\Traits\ConfigurableDatabaseConnection;
 
 class PenggunaanBangunan extends Model
@@ -31,7 +32,9 @@ class PenggunaanBangunan extends Model
     public const GEDUNG_SEKOLAH = '16';
     public const TANAH_KOSONG = '50';
 
-    public const table = 'jpb_jpt';
-    protected $table = self::table;
+    public function getTable()
+    {
+        return DatabaseSwitch::tableRefJPB();
+    }
 
 }
