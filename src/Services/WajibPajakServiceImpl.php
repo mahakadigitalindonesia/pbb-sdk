@@ -55,7 +55,7 @@ class WajibPajakServiceImpl implements WajibPajakService
                 'status_pekerjaan_wp' => Str::limit($subjekPajak->getStatusPekerjaan(), 1, '')
             ]);
         } else {
-            $wajibPajak->create([
+            WajibPajak::create([
                 'subjek_pajak_id' => $subjekPajak->getId(),
                 'nm_wp' => Str::limit($subjekPajak->getNama(), 30, ''),
                 'jalan_wp' => Str::limit($subjekPajak->getJalan(), 30, ''),
