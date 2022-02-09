@@ -59,9 +59,12 @@ class WajibPajakServiceImpl implements WajibPajakService
             Log::info('Wajib Pajak berhasil diupdate.', $data);
         } else {
             $data = array_merge($data, ['subjek_pajak_id' => (string) $subjekPajak->getId()]);
-//            WajibPajak::create($data);
-            DB::connection(config('pbb.database.connection'))->table(WajibPajak::table)->insert($data);
-            Log::info('Wajib Pajak berhasil dibuat.', $data);
+            try {
+                WajibPajak::create($data);
+                Log::info('Wajib Pajak berhasil dibuat.', $data);
+            }catch (\Exception $e){
+                Log::error('Gagal menambahkan data Wajib Pajak.', $e->getTrace());
+            }
         }
         Log::debug('Data Wajib Pajak', $data);
         return $this->findById($subjekPajak->getId());
