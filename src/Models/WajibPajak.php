@@ -18,7 +18,20 @@ class WajibPajak extends Model
     public const nama = self::table. '.nm_wp';
     protected $table = self::table;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'subjek_pajak_id',
+        'nm_wp',
+        'jalan_wp',
+        'blok_kav_no_wp',
+        'rw_wp',
+        'rt_wp',
+        'kelurahan_wp',
+        'kota_wp',
+        'kd_pos_wp',
+        'telp_wp',
+        'npwp',
+        'status_pekerjaan_wp'
+    ];
     protected $keyType = 'string';
     protected $primaryKey = 'subjek_pajak_id';
     public $incrementing = false;
