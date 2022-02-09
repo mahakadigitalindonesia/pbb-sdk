@@ -5,6 +5,7 @@ namespace Mdigi\PBB\Services;
 
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Mdigi\PBB\Contracts\WajibPajakService;
 use Mdigi\PBB\Domains\DataSubjekPajak;
@@ -40,36 +41,25 @@ class WajibPajakServiceImpl implements WajibPajakService
     public function save(DataSubjekPajak $subjekPajak)
     {
         $wajibPajak = WajibPajak::query()->where(DB::raw('trim(subjek_pajak_id)'), $subjekPajak->getId())->first();
+        $data = [
+            'nm_wp' => Str::limit($subjekPajak->getNama(), 30, ''),
+            'jalan_wp' => Str::limit($subjekPajak->getJalan(), 30, ''),
+            'blok_kav_no_wp' => Str::limit($subjekPajak->getBlokKavlingNomor(), 15, ''),
+            'rw_wp' => Str::limit($subjekPajak->getRw(), 2, ''),
+            'rt_wp' => Str::limit($subjekPajak->getRw(), 3, ''),
+            'kelurahan_wp' => Str::limit($subjekPajak->getKelurahan(), 30, ''),
+            'kota_wp' => Str::limit($subjekPajak->getKota(), 30, ''),
+            'kd_pos_wp' => Str::limit($subjekPajak->getKodePos(), 5, ''),
+            'telp_wp' => Str::limit($subjekPajak->getTelepon(), 20, ''),
+            'npwp' => Str::limit($subjekPajak->getNpwp(), 15, ''),
+            'status_pekerjaan_wp' => Str::limit($subjekPajak->getStatusPekerjaan(), 1, '')
+        ];
         if ($wajibPajak) {
-            $wajibPajak->update([
-                'nm_wp' => Str::limit($subjekPajak->getNama(), 30, ''),
-                'jalan_wp' => Str::limit($subjekPajak->getJalan(), 30, ''),
-                'blok_kav_no_wp' => Str::limit($subjekPajak->getBlokKavlingNomor(), 15, ''),
-                'rw_wp' => Str::limit($subjekPajak->getRw(), 2, ''),
-                'rt_wp' => Str::limit($subjekPajak->getRw(), 3, ''),
-                'kelurahan_wp' => Str::limit($subjekPajak->getKelurahan(), 30, ''),
-                'kota_wp' => Str::limit($subjekPajak->getKota(), 30, ''),
-                'kd_pos_wp' => Str::limit($subjekPajak->getKodePos(), 5, ''),
-                'telp_wp' => Str::limit($subjekPajak->getTelepon(), 20, ''),
-                'npwp' => Str::limit($subjekPajak->getNpwp(), 15, ''),
-                'status_pekerjaan_wp' => Str::limit($subjekPajak->getStatusPekerjaan(), 1, '')
-            ]);
+            $wajibPajak->update($data);
         } else {
-            WajibPajak::create([
-                'subjek_pajak_id' => $subjekPajak->getId(),
-                'nm_wp' => Str::limit($subjekPajak->getNama(), 30, ''),
-                'jalan_wp' => Str::limit($subjekPajak->getJalan(), 30, ''),
-                'blok_kav_no_wp' => Str::limit($subjekPajak->getBlokKavlingNomor(), 15, ''),
-                'rw_wp' => Str::limit($subjekPajak->getRw(), 2, ''),
-                'rt_wp' => Str::limit($subjekPajak->getRw(), 3, ''),
-                'kelurahan_wp' => Str::limit($subjekPajak->getKelurahan(), 30, ''),
-                'kota_wp' => Str::limit($subjekPajak->getKota(), 30, ''),
-                'kd_pos_wp' => Str::limit($subjekPajak->getKodePos(), 5, ''),
-                'telp_wp' => Str::limit($subjekPajak->getTelepon(), 20, ''),
-                'npwp' => Str::limit($subjekPajak->getNpwp(), 15, ''),
-                'status_pekerjaan_wp' => Str::limit($subjekPajak->getStatusPekerjaan(), 1, '')
-            ]);
+            WajibPajak::create(array_merge($data, ['subjek_pajak_id' => $subjekPajak->getId()]));
         }
+        Log::debug('Data Wajib Pajak', $data);
         return $this->findById($subjekPajak->getId());
     }
 }
