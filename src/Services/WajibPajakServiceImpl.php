@@ -39,7 +39,7 @@ class WajibPajakServiceImpl implements WajibPajakService
 
     public function save(DataSubjekPajak $subjekPajak)
     {
-        $wajibPajak = WajibPajak::query()->where(DB::raw('trim(subjek_pajak_id)'), $subjekPajak->getId());
+        $wajibPajak = WajibPajak::query()->where(DB::raw('trim(subjek_pajak_id)'), $subjekPajak->getId())->first();
         if ($wajibPajak) {
             $wajibPajak->update([
                 'nm_wp' => Str::limit($subjekPajak->getNama(), 30, ''),
