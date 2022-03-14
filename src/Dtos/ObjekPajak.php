@@ -37,8 +37,8 @@ class ObjekPajak extends ObjekPajakKeys
             $this->wajibPajakId = trim($model->subjek_pajak_id);
             $this->jalan = $model->jalan_op;
             $this->blokKavlingNomor = $model->blok_kav_no_op ?? '-';
-            $this->rt = $model->rt ?? '000';
-            $this->rw = $model->rw ?? '00';
+            $this->rt = $model->rt_op ?? '000';
+            $this->rw = $model->rw_op ?? '00';
             $this->nomorSertifikat = $model->no_persil ?? '-';
             $this->nomorFormulirSPOP = $model->no_formulir_spop;
             $this->kodeKepemilikan = $model->kd_status_wp;
