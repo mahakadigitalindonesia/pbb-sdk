@@ -36,7 +36,7 @@ class WajibPajak
             $this->telepon = $model->telp_wp ?? '-';
             $this->npwp = $model->npwp ?? '-';
             $this->statusPekerjaan = $model->status_pekerjaan_wp;
-            $this->kodePos = $model->kd_pos_wp ?? '0';
+            $this->kodePos = $model->kd_pos_wp ?? '-';
             $this->pekerjaan = $model->pekerjaan ?? '-';
         }
     }
