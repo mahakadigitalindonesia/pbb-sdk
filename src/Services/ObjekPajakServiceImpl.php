@@ -194,8 +194,8 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 $q->where(ObjekPajak::kodeKelurahan, $search['kodeKelurahan']);
             })->when(isset($search['alamatOP']), function ($q) use ($search) {
                 $q->whereRaw('lower(' . ObjekPajak::jalan . "|| ' RT.'||" . ObjekPajak::rt . "|| ' RW.'||" . ObjekPajak::rw . ") LIKE '%" . strtolower($search['alamatOP']) . "%'");
-            })->when(isset($search['NopHelper']), function ($q) use ($search) {
-                $q->whereRaw(ObjekPajak::kodeProvinsi . NopHelper::SEPARATOR . ObjekPajak::kodeDati . NopHelper::SEPARATOR . ObjekPajak::kodeKecamatan . NopHelper::SEPARATOR . ObjekPajak::kodeKelurahan . NopHelper::SEPARATOR . ObjekPajak::kodeBlok . NopHelper::SEPARATOR . ObjekPajak::nomorUrut . NopHelper::SEPARATOR . ObjekPajak::kodeJenis . " LIKE '%" . $search['nop'] . "%'");
+            })->when(isset($search['NOP']), function ($q) use ($search) {
+                $q->whereRaw(ObjekPajak::kodeProvinsi . NopHelper::SEPARATOR . ObjekPajak::kodeDati . NopHelper::SEPARATOR . ObjekPajak::kodeKecamatan . NopHelper::SEPARATOR . ObjekPajak::kodeKelurahan . NopHelper::SEPARATOR . ObjekPajak::kodeBlok . NopHelper::SEPARATOR . ObjekPajak::nomorUrut . NopHelper::SEPARATOR . ObjekPajak::kodeJenis . " LIKE '%" . $search['NOP'] . "%'");
             })->paginate($search['pageSize'], ['*'], 'page', $search['pageNumber']);
         return PaginatedCollection::map($data->getCollection()->mapInto(ObjekPajakSubjek::class), $data);
     }
