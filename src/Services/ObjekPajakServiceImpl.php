@@ -203,7 +203,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                     ->where('thn_awal', '<=', date('Y'))
                     ->where('thn_akhir', '>=', date('Y'))->get();
                 foreach ($bukuKetetapan as $buku) {
-                    $q->whereRaw(ObjekPajak::kodeProvinsi . ObjekPajak::kodeDati . ObjekPajak::kodeKecamatan . ObjekPajak::kodeKelurahan . ObjekPajak::kodeBlok . ObjekPajak::nomorUrut . ObjekPajak::kodeJenis . ' EXISTS (SELECT KD_PROPINSI||KD_DATI2||KD_KECAMATAN||KD_KELURAHAN||KD_BLOK||NO_URUT||KD_JNS_OP) 
+                    $q->whereRaw(ObjekPajak::kodeProvinsi . '||' . ObjekPajak::kodeDati . '||' . ObjekPajak::kodeKecamatan . '||' . ObjekPajak::kodeKelurahan . '||' . ObjekPajak::kodeBlok . '||' . ObjekPajak::nomorUrut . '||' . ObjekPajak::kodeJenis . ' EXISTS (SELECT KD_PROPINSI||KD_DATI2||KD_KECAMATAN||KD_KELURAHAN||KD_BLOK||NO_URUT||KD_JNS_OP) 
                     FROM SPPT WHERE SPPT.KD_PROPINSI=DAT_OBJEK_PAJAK.KD_PROPINSI 
                     AND SPPT.KD_DATI2=DAT_OBJEK_PAJAK.KD_DATI2 
                     AND SPPT.KD_KECAMATAN=DAT_OBJEK_PAJAK.KD_KECAMATAN
