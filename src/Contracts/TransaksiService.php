@@ -12,4 +12,5 @@ interface TransaksiService
     public function findByNOPAndTahun(NOP $nop, $tahun);
     public function isNOPHasUnpaid(NOP $nop);
     public function findAll($search);
+    public function findTagihanByNOP(NOP $nop);
 }

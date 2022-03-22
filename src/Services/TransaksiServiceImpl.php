@@ -82,6 +82,34 @@ class TransaksiServiceImpl implements TransaksiService
         return $transaksi->get()->mapInto(TransaksiOP::class);
     }
 
+    public function findTagihanByNop(NOP $nop)
+    {
+        return Ketetapan::query()->select([
+            Ketetapan::allColumns,
+            DB::raw(DatabaseRaw::hitungDenda() . ' as denda_ketetapan'),
+            DB::raw(ObjekPajak::jalan . "|| ' RT.'||" . ObjekPajak::rt . "|| ' RW.'||" . ObjekPajak::rw . ' as alamat_op'),
+        ])->join(ObjekPajak::table, function ($join) {
+            $join->on(ObjekPajak::kodeProvinsi, '=', Ketetapan::kodeProvinsi)
+                ->on(ObjekPajak::kodeDati, '=', Ketetapan::kodeDati)
+                ->on(ObjekPajak::kodeKecamatan, '=', Ketetapan::kodeKecamatan)
+                ->on(ObjekPajak::kodeKelurahan, '=', Ketetapan::kodeKelurahan)
+                ->on(ObjekPajak::kodeBlok, '=', Ketetapan::kodeBlok)
+                ->on(ObjekPajak::nomorUrut, '=', Ketetapan::nomorUrut)
+                ->on(ObjekPajak::kodeJenis, '=', Ketetapan::kodeJenis);
+        })->leftJoin(Pembayaran::table, function ($join) {
+            $join->on(Pembayaran::kodeProvinsi, '=', Ketetapan::kodeProvinsi)
+                ->on(Pembayaran::kodeDati, '=', Ketetapan::kodeDati)
+                ->on(Pembayaran::kodeKecamatan, '=', Ketetapan::kodeKecamatan)
+                ->on(Pembayaran::kodeKelurahan, '=', Ketetapan::kodeKelurahan)
+                ->on(Pembayaran::kodeBlok, '=', Ketetapan::kodeBlok)
+                ->on(Pembayaran::nomorUrut, '=', Ketetapan::nomorUrut)
+                ->on(Pembayaran::kodeJenis, '=', Ketetapan::kodeJenis)
+                ->on(Pembayaran::tahun, '=', Ketetapan::tahun);
+        })->whereNull(Pembayaran::kodeProvinsi)
+            ->where(Ketetapan::tahun, '>', TahunKetetapan::maxYear())
+            ->orderByDesc(Ketetapan::tahun)->get()->mapInto(TransaksiOP::class);
+    }
+
     public function getQuery(NOP $nop)
     {
         return Ketetapan::select([
