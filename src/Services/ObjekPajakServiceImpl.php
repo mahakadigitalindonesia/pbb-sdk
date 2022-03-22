@@ -200,8 +200,8 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 $q->whereRaw(ObjekPajak::kodeProvinsi . NopHelper::SEPARATOR . ObjekPajak::kodeDati . NopHelper::SEPARATOR . ObjekPajak::kodeKecamatan . NopHelper::SEPARATOR . ObjekPajak::kodeKelurahan . NopHelper::SEPARATOR . ObjekPajak::kodeBlok . NopHelper::SEPARATOR . ObjekPajak::nomorUrut . NopHelper::SEPARATOR . ObjekPajak::kodeJenis . " LIKE '%" . $search['NOP'] . "%'");
             })->when(isset($search['bukuKetetapan']), function ($q) use ($search) {
                 $bukuKetetapan = BukuKetetapan::query()->whereIn('kd_buku', $search['bukuKetetapan'])
-                    ->where('thn_awal', '>=', date('Y'))
-                    ->where('thn_akhir', '<=', date('Y'))->get();
+                    ->where('thn_awal', '<=', date('Y'))
+                    ->where('thn_akhir', '>=', date('Y'))->get();
                 foreach ($bukuKetetapan as $buku) {
                     $q->whereRaw(ObjekPajak::kodeProvinsi . ObjekPajak::kodeDati . ObjekPajak::kodeKecamatan . ObjekPajak::kodeKelurahan . ObjekPajak::kodeBlok . ObjekPajak::nomorUrut . ObjekPajak::kodeJenis . ' EXISTS (SELECT KD_PROPINSI||KD_DATI2||KD_KECAMATAN||KD_KELURAHAN||KD_BLOK||NO_URUT||KD_JNS_OP) 
                     FROM SPPT WHERE SPPT.KD_PROPINSI=DAT_OBJEK_PAJAK.KD_PROPINSI 
