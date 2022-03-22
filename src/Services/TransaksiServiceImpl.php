@@ -74,9 +74,12 @@ class TransaksiServiceImpl implements TransaksiService
             })->when(isset($search['NOP']), function ($q) use ($search) {
                 $q->whereRaw(Ketetapan::kodeProvinsi . self::NOP_SEPARATOR . Ketetapan::kodeDati . self::NOP_SEPARATOR . Ketetapan::kodeKecamatan . self::NOP_SEPARATOR . Ketetapan::kodeKelurahan . self::NOP_SEPARATOR . Ketetapan::kodeBlok . self::NOP_SEPARATOR . Ketetapan::nomorUrut . self::NOP_SEPARATOR . Ketetapan::kodeJenis . " LIKE '%" . $search['NOP'] . "%'");
             })->orderByDesc(Ketetapan::tahun);
-        $transaksi = $transaksi->paginate($search['pageSize'], ['*'], 'page', $search['pageNumber']);
-        $data = $transaksi->getCollection()->mapInto(TransaksiOP::class);
-        return PaginatedCollection::map($data, $transaksi);
+        if (isset($search['pageSize']) && isset($search['pageNumber'])) {
+            $transaksi = $transaksi->paginate($search['pageSize'], ['*'], 'page', $search['pageNumber']);
+            $data = $transaksi->getCollection()->mapInto(TransaksiOP::class);
+            return PaginatedCollection::map($data, $transaksi);
+        }
+        return $transaksi->get()->mapInto(TransaksiOP::class);
     }
 
     public function getQuery(NOP $nop)
