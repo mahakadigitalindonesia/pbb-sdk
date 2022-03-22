@@ -17,11 +17,9 @@ use Mdigi\PBB\Dtos\PaginatedCollection;
 use Mdigi\PBB\Helpers\LookupItemType;
 use Mdigi\PBB\Helpers\NopHelper;
 use Mdigi\PBB\Helpers\OPColumns;
-use Mdigi\PBB\Helpers\TahunKetetapan;
 use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Models\Kecamatan;
 use Mdigi\PBB\Models\Kelurahan;
-use Mdigi\PBB\Models\Ketetapan;
 use Mdigi\PBB\Models\Kota;
 use Mdigi\PBB\Models\LookupItem;
 use Mdigi\PBB\Models\ObjekBumi;
@@ -171,17 +169,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
             DB::raw(ObjekPajak::jalan . "|| ' RT.'||" . ObjekPajak::rt . "|| ' RW.'||" . ObjekPajak::rw . ' as alamat_op'),
             WajibPajak::nama,
             DB::raw(WajibPajak::jalan . "|| ' RT.'||" . WajibPajak::rt . "|| ' RW.'||" . WajibPajak::rw . ' as alamat_wp'),
-        ])->join(Ketetapan::table, function ($join) {
-            $join->on(ObjekPajak::kodeProvinsi, '=', Ketetapan::kodeProvinsi)
-                ->on(ObjekPajak::kodeDati, '=', Ketetapan::kodeDati)
-                ->on(ObjekPajak::kodeKecamatan, '=', Ketetapan::kodeKecamatan)
-                ->on(ObjekPajak::kodeKelurahan, '=', Ketetapan::kodeKelurahan)
-                ->on(ObjekPajak::kodeBlok, '=', Ketetapan::kodeBlok)
-                ->on(ObjekPajak::nomorUrut, '=', Ketetapan::nomorUrut)
-                ->on(ObjekPajak::kodeJenis, '=', Ketetapan::kodeJenis)
-                ->where(Ketetapan::tahun, '>', TahunKetetapan::maxYear())
-                ->where(Ketetapan::statusPembayaran, '0');
-        })->join(WajibPajak::table, WajibPajak::nik, '=', ObjekPajak::idWP)
+        ])->join(WajibPajak::table, WajibPajak::nik, '=', ObjekPajak::idWP)
             ->join(Tanah::table, function ($join) {
                 $join->on(Tanah::kodePropinsi, '=', ObjekPajak::kodeProvinsi)
                     ->on(Tanah::kodeDati, '=', ObjekPajak::kodeDati)
