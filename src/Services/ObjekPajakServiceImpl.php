@@ -12,7 +12,10 @@ use Mdigi\PBB\Contracts\ObjekPajakService;
 use Mdigi\PBB\Domains\DataObjekPajak;
 use Mdigi\PBB\Dtos\NOP;
 use Mdigi\PBB\Dtos\ObjekPajak as ObjekPajakDto;
+use Mdigi\PBB\Dtos\ObjekPajakSubjek;
+use Mdigi\PBB\Dtos\PaginatedCollection;
 use Mdigi\PBB\Helpers\LookupItemType;
+use Mdigi\PBB\Helpers\NopHelper;
 use Mdigi\PBB\Helpers\OPColumns;
 use Mdigi\PBB\Models\Bangunan;
 use Mdigi\PBB\Models\Kecamatan;
@@ -22,6 +25,7 @@ use Mdigi\PBB\Models\LookupItem;
 use Mdigi\PBB\Models\ObjekBumi;
 use Mdigi\PBB\Models\ObjekPajak;
 use Mdigi\PBB\Models\Tanah;
+use Mdigi\PBB\Models\WajibPajak;
 
 class ObjekPajakServiceImpl implements ObjekPajakService
 {
@@ -149,5 +153,50 @@ class ObjekPajakServiceImpl implements ObjekPajakService
             ->get()
             ->max(OPColumns::nomorUrut);
         return Str::padLeft((string)($lastNOP + 1), 4, '0');
+    }
+
+    public function findAll($search)
+    {
+        $data = ObjekPajak::query()->select([
+            ObjekPajak::allColumns,
+            Kecamatan::namaKecamatan,
+            Kelurahan::namaKelurahan,
+            't_kepemilikan.nm_lookup_item as kepemilikan',
+            't_jenis_tanah.nm_lookup_item as jenis_tanah',
+            Tanah::kodeZonaNilaiTanah,
+            Tanah::kodeTanah,
+            DB::raw('0' . ' as jumlah_bangunan'),
+            DB::raw(ObjekPajak::jalan . "|| ' RT.'||" . ObjekPajak::rt . "|| ' RW.'||" . ObjekPajak::rw . ' as alamat_op'),
+            WajibPajak::nama,
+            DB::raw(WajibPajak::jalan . "|| ' RT.'||" . WajibPajak::rt . "|| ' RW.'||" . WajibPajak::rw . ' as alamat_wp'),
+        ])->join(WajibPajak::table, WajibPajak::nik, '=', ObjekPajak::idWP)
+            ->join(Tanah::table, function ($join) {
+            $join->on(Tanah::kodePropinsi, '=', ObjekPajak::kodeProvinsi)
+                ->on(Tanah::kodeDati, '=', ObjekPajak::kodeDati)
+                ->on(Tanah::kodeKecamatan, '=', ObjekPajak::kodeKecamatan)
+                ->on(Tanah::kodeKelurahan, '=', ObjekPajak::kodeKelurahan)
+                ->on(Tanah::kodeBlok, '=', ObjekPajak::kodeBlok)
+                ->on(Tanah::nomorUrut, '=', ObjekPajak::nomorUrut)
+                ->on(Tanah::kodeJenis, '=', ObjekPajak::kodeJenis);
+        })->join(Kecamatan::table, Kecamatan::kodeKecamatan, '=', ObjekPajak::kodeKecamatan)
+            ->join(Kelurahan::table, function ($join) {
+                $join->on(Kelurahan::kodeKecamatan, '=', ObjekPajak::kodeKecamatan)
+                    ->on(Kelurahan::kodeKelurahan, '=', ObjekPajak::kodeKelurahan);
+            })->join(LookupItem::table . ' as t_kepemilikan', function ($join) {
+                $join->on('t_kepemilikan.kd_lookup_item', '=', ObjekPajak::kodeKepemilikan)
+                    ->where('t_kepemilikan.kd_lookup_group', '=', LookupItemType::KEPEMILIKAN);
+            })->join(LookupItem::table . ' as t_jenis_tanah', function ($join) {
+                $join->on('t_jenis_tanah.kd_lookup_item', '=', Tanah::kodeTanah)
+                    ->where('t_jenis_tanah.kd_lookup_group', '=', LookupItemType::TANAH);
+            })->when(isset($search['kodeKecamatan']), function ($q) use ($search) {
+                $q->where(ObjekPajak::kodeKecamatan, $search['kodeKecamatan']);
+            })->when(isset($search['kodeKelurahan']), function ($q) use ($search) {
+                $q->where(ObjekPajak::kodeKelurahan, $search['kodeKelurahan']);
+            })->when(isset($search['alamatOP']), function ($q) use ($search) {
+                $q->whereRaw('lower(' . ObjekPajak::jalan . "|| ' RT.'||" . ObjekPajak::rt . "|| ' RW.'||" . ObjekPajak::rw . ") LIKE '%" . strtolower($search['alamatOP']) . "%'");
+            })->when(isset($search['NopHelper']), function ($q) use ($search) {
+                $q->whereRaw(ObjekPajak::kodeProvinsi . NopHelper::SEPARATOR . ObjekPajak::kodeDati . NopHelper::SEPARATOR . ObjekPajak::kodeKecamatan . NopHelper::SEPARATOR . ObjekPajak::kodeKelurahan . NopHelper::SEPARATOR . ObjekPajak::kodeBlok . NopHelper::SEPARATOR . ObjekPajak::nomorUrut . NopHelper::SEPARATOR . ObjekPajak::kodeJenis . " LIKE '%" . $search['nop'] . "%'");
+            })->paginate($search['pageSize'], ['*'], 'page', $search['pageNumber']);
+        return PaginatedCollection::map($data->getCollection()->mapInto(ObjekPajakSubjek::class), $data);
     }
 }

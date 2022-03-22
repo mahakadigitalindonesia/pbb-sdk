@@ -26,6 +26,7 @@ class ObjekPajak extends Model
     public const rt = self::table . '.rt_op';
     public const rw = self::table . '.rw_op';
     public const kodeKepemilikan = self::table . '.kd_status_wp';
+    public const idWP = self::table. '.subjek_pajak_id';
 
     protected $table = self::table;
     protected $guarded = [];

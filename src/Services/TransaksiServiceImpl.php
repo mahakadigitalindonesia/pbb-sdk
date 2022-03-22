@@ -71,7 +71,7 @@ class TransaksiServiceImpl implements TransaksiService
                 $q->where(Ketetapan::kodeKelurahan, $search['kodeKelurahan']);
             })->when(isset($search['alamatOP']), function ($q) use ($search) {
                 $q->whereRaw('lower(' . ObjekPajak::jalan . "|| ' RT.'||" . ObjekPajak::rt . "|| ' RW.'||" . ObjekPajak::rw . ") LIKE '%" . strtolower($search['alamatOP']) . "%'");
-            })->when(isset($search['NOP']), function ($q) use ($search) {
+            })->when(isset($search['NopHelper']), function ($q) use ($search) {
                 $q->whereRaw(Ketetapan::kodeProvinsi . self::NOP_SEPARATOR . Ketetapan::kodeDati . self::NOP_SEPARATOR . Ketetapan::kodeKecamatan . self::NOP_SEPARATOR . Ketetapan::kodeKelurahan . self::NOP_SEPARATOR . Ketetapan::kodeBlok . self::NOP_SEPARATOR . Ketetapan::nomorUrut . self::NOP_SEPARATOR . Ketetapan::kodeJenis . " LIKE '%" . $search['nop'] . "%'");
             })->orderByDesc(Ketetapan::tahun);
         $transaksi = $transaksi->paginate($search['pageSize'], ['*'], 'page', $search['pageNumber']);

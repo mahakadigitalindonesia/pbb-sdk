@@ -15,4 +15,6 @@ interface ObjekPajakService
     public function delete(NOP $nop);
 
     public function findLastNOPinBlok($kodeKecamatan, $kodeKelurahan, $kodeBlok);
+
+    public function findAll($search);
 }
