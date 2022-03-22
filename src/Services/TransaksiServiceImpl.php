@@ -44,7 +44,7 @@ class TransaksiServiceImpl implements TransaksiService
         $transaksi = Ketetapan::query()->select([
             Ketetapan::allColumns,
             DB::raw(DatabaseRaw::hitungDenda() . ' as denda_ketetapan'),
-            DB::raw( ObjekPajak::jalan."|| 'RT.'||".ObjekPajak::rt."|| 'RW.'||".ObjekPajak::rw. ' as alamat_op'),
+            DB::raw( ObjekPajak::jalan."|| ' RT.'||".ObjekPajak::rt."|| ' RW.'||".ObjekPajak::rw. ' as alamat_op'),
         ])->join(ObjekPajak::table, function($join){
             $join->on(ObjekPajak::kodeProvinsi, '=', Ketetapan::kodeProvinsi)
                 ->on(ObjekPajak::kodeDati, '=', Ketetapan::kodeDati)
@@ -69,7 +69,7 @@ class TransaksiServiceImpl implements TransaksiService
             })->when(isset($search['kodeKelurahan']), function ($q) use ($search) {
                 $q->where(Ketetapan::kodeKelurahan, $search['kodeKelurahan']);
             })->when(isset($search['alamatOP']), function ($q) use ($search) {
-                $q->whereRaw('lower(' . ObjekPajak::jalan."|| 'RT.'||".ObjekPajak::rt."|| 'RW.'||".ObjekPajak::rw.") LIKE '%" . strtolower($search['alamatOP']) . "%'");
+                $q->whereRaw('lower(' . ObjekPajak::jalan."|| ' RT.'||".ObjekPajak::rt."|| ' RW.'||".ObjekPajak::rw.") LIKE '%" . strtolower($search['alamatOP']) . "%'");
             })->when(isset($search['NOP']), function ($q) use ($search) {
                 $q->whereRaw(Ketetapan::kodeProvinsi . self::NOP_SEPARATOR . Ketetapan::kodeDati . self::NOP_SEPARATOR . Ketetapan::kodeKecamatan . self::NOP_SEPARATOR . Ketetapan::kodeKelurahan . self::NOP_SEPARATOR . Ketetapan::kodeBlok . self::NOP_SEPARATOR . Ketetapan::nomorUrut . self::NOP_SEPARATOR . Ketetapan::kodeJenis . " LIKE '%" . $search['nop'] . "%'");
             })->orderByDesc(Ketetapan::tahun);
