@@ -199,20 +199,23 @@ class ObjekPajakServiceImpl implements ObjekPajakService
             })->when(isset($search['NOP']), function ($q) use ($search) {
                 $q->whereRaw(ObjekPajak::kodeProvinsi . NopHelper::SEPARATOR . ObjekPajak::kodeDati . NopHelper::SEPARATOR . ObjekPajak::kodeKecamatan . NopHelper::SEPARATOR . ObjekPajak::kodeKelurahan . NopHelper::SEPARATOR . ObjekPajak::kodeBlok . NopHelper::SEPARATOR . ObjekPajak::nomorUrut . NopHelper::SEPARATOR . ObjekPajak::kodeJenis . " LIKE '%" . $search['NOP'] . "%'");
             })->when(isset($search['bukuKetetapan']), function ($q) use ($search) {
-                $bukuKetetapan = BukuKetetapan::query()->whereIn('kd_buku', $search['bukuKetetapan'])
+                $buku = BukuKetetapan::query()->select([
+                    DB::raw('min(nilai_min_buku) as min_buku'),
+                    DB::raw('max(nilai_max_buku) as max_buku'),
+                ])->whereIn('kd_buku', $search['bukuKetetapan'])
                     ->where('thn_awal', '<=', date('Y'))
-                    ->where('thn_akhir', '>=', date('Y'))->get();
-                foreach ($bukuKetetapan as $buku) {
-                    $q->whereRaw(ObjekPajak::kodeProvinsi . '||' . ObjekPajak::kodeDati . '||' . ObjekPajak::kodeKecamatan . '||' . ObjekPajak::kodeKelurahan . '||' . ObjekPajak::kodeBlok . '||' . ObjekPajak::nomorUrut . '||' . ObjekPajak::kodeJenis . ' EXISTS (SELECT KD_PROPINSI||KD_DATI2||KD_KECAMATAN||KD_KELURAHAN||KD_BLOK||NO_URUT||KD_JNS_OP) 
-                    FROM SPPT WHERE SPPT.KD_PROPINSI=DAT_OBJEK_PAJAK.KD_PROPINSI 
-                    AND SPPT.KD_DATI2=DAT_OBJEK_PAJAK.KD_DATI2 
+                    ->where('thn_akhir', '>=', date('Y'))->first();
+                $selectSpptBuku = 'SELECT SPPT.KD_PROPINSI||SPPT.KD_DATI2||SPPT.KD_KECAMATAN||SPPT.KD_KELURAHAN||SPPT.KD_BLOK||SPPT.NO_URUT||SPPT.KD_JNS_OP
+                    FROM SPPT WHERE SPPT.KD_PROPINSI=DAT_OBJEK_PAJAK.KD_PROPINSI
+                    AND SPPT.KD_DATI2=DAT_OBJEK_PAJAK.KD_DATI2
                     AND SPPT.KD_KECAMATAN=DAT_OBJEK_PAJAK.KD_KECAMATAN
                     AND SPPT.KD_KELURAHAN=DAT_OBJEK_PAJAK.KD_KELURAHAN
                     AND SPPT.KD_BLOK=DAT_OBJEK_PAJAK.KD_BLOK
                     AND SPPT.NO_URUT=DAT_OBJEK_PAJAK.NO_URUT
                     AND SPPT.KD_JNS_OP=DAT_OBJEK_PAJAK.KD_JNS_OP
-                    AND SPPT.PBB_YG_HARUS_DIBAYAR_SPPT BETWEEN ' . $buku->nilai_min_buku . ' AND ' . $buku->nilai_max_buku);
-                }
+                    AND SPPT.STATUS_PEMBAYARAN_SPPT=0
+                    AND SPPT.PBB_TERHUTANG_SPPT BETWEEN ' . $buku->min_buku . ' AND ' . $buku->max_buku;
+                $q->whereRaw(ObjekPajak::kodeProvinsi . '||' . ObjekPajak::kodeDati . '||' . ObjekPajak::kodeKecamatan . '||' . ObjekPajak::kodeKelurahan . '||' . ObjekPajak::kodeBlok . '||' . ObjekPajak::nomorUrut . '||' . ObjekPajak::kodeJenis . ' IN (' . $selectSpptBuku . ')');
             });
         if (isset($search['pageSize']) && isset($search['pageNumber'])) {
             $data = $data->paginate($search['pageSize'], ['*'], 'page', $search['pageNumber']);
