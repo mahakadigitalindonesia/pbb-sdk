@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Mdigi\PBB\Contracts\TransaksiService;
 use Mdigi\PBB\Dtos\NOP;
+use Mdigi\PBB\Dtos\PaginatedCollection;
 use Mdigi\PBB\Dtos\Transaksi;
 use Mdigi\PBB\Dtos\TransaksiOP;
 use Mdigi\PBB\Helpers\DatabaseRaw;
@@ -44,8 +45,8 @@ class TransaksiServiceImpl implements TransaksiService
         $transaksi = Ketetapan::query()->select([
             Ketetapan::allColumns,
             DB::raw(DatabaseRaw::hitungDenda() . ' as denda_ketetapan'),
-            DB::raw( ObjekPajak::jalan."|| ' RT.'||".ObjekPajak::rt."|| ' RW.'||".ObjekPajak::rw. ' as alamat_op'),
-        ])->join(ObjekPajak::table, function($join){
+            DB::raw(ObjekPajak::jalan . "|| ' RT.'||" . ObjekPajak::rt . "|| ' RW.'||" . ObjekPajak::rw . ' as alamat_op'),
+        ])->join(ObjekPajak::table, function ($join) {
             $join->on(ObjekPajak::kodeProvinsi, '=', Ketetapan::kodeProvinsi)
                 ->on(ObjekPajak::kodeDati, '=', Ketetapan::kodeDati)
                 ->on(ObjekPajak::kodeKecamatan, '=', Ketetapan::kodeKecamatan)
@@ -69,12 +70,13 @@ class TransaksiServiceImpl implements TransaksiService
             })->when(isset($search['kodeKelurahan']), function ($q) use ($search) {
                 $q->where(Ketetapan::kodeKelurahan, $search['kodeKelurahan']);
             })->when(isset($search['alamatOP']), function ($q) use ($search) {
-                $q->whereRaw('lower(' . ObjekPajak::jalan."|| ' RT.'||".ObjekPajak::rt."|| ' RW.'||".ObjekPajak::rw.") LIKE '%" . strtolower($search['alamatOP']) . "%'");
+                $q->whereRaw('lower(' . ObjekPajak::jalan . "|| ' RT.'||" . ObjekPajak::rt . "|| ' RW.'||" . ObjekPajak::rw . ") LIKE '%" . strtolower($search['alamatOP']) . "%'");
             })->when(isset($search['NOP']), function ($q) use ($search) {
                 $q->whereRaw(Ketetapan::kodeProvinsi . self::NOP_SEPARATOR . Ketetapan::kodeDati . self::NOP_SEPARATOR . Ketetapan::kodeKecamatan . self::NOP_SEPARATOR . Ketetapan::kodeKelurahan . self::NOP_SEPARATOR . Ketetapan::kodeBlok . self::NOP_SEPARATOR . Ketetapan::nomorUrut . self::NOP_SEPARATOR . Ketetapan::kodeJenis . " LIKE '%" . $search['nop'] . "%'");
             })->orderByDesc(Ketetapan::tahun);
         $transaksi = $transaksi->paginate($search['pageSize'], ['*'], 'page', $search['pageNumber']);
-        return $transaksi->getCollection()->mapInto(TransaksiOP::class);
+        $data = $transaksi->getCollection()->mapInto(TransaksiOP::class);
+        return PaginatedCollection::map($data, $transaksi);
     }
 
     public function getQuery(NOP $nop)
