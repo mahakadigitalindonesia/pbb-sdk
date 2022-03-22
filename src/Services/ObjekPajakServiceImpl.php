@@ -169,6 +169,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
             DB::raw(ObjekPajak::jalan . "|| ' RT.'||" . ObjekPajak::rt . "|| ' RW.'||" . ObjekPajak::rw . ' as alamat_op'),
             WajibPajak::nama,
             DB::raw(WajibPajak::jalan . "|| ' RT.'||" . WajibPajak::rt . "|| ' RW.'||" . WajibPajak::rw . ' as alamat_wp'),
+            WajibPajak::kota,
         ])->join(WajibPajak::table, WajibPajak::nik, '=', ObjekPajak::idWP)
             ->join(Tanah::table, function ($join) {
                 $join->on(Tanah::kodePropinsi, '=', ObjekPajak::kodeProvinsi)

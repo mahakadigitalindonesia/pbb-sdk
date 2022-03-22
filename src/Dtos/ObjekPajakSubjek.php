@@ -11,6 +11,7 @@ class ObjekPajakSubjek extends ObjekPajakKeys
     public $namaWP;
     public $alamatWP;
     public $alamatOP;
+    public $kotaWP;
     public $jalan;
     public $blokKavlingNomor;
     public $rt;
@@ -41,6 +42,7 @@ class ObjekPajakSubjek extends ObjekPajakKeys
             $this->alamatOP = $model->alamat_op;
             $this->namaWP = $model->nm_wp;
             $this->alamatWP = $model->alamat_wp;
+            $this->kotaWP = $model->kota_wp;
             $this->jalan = $model->jalan_op;
             $this->blokKavlingNomor = $model->blok_kav_no_op ?? '-';
             $this->rt = $model->rt_op ?? '000';

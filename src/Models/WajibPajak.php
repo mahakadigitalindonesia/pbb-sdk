@@ -21,6 +21,7 @@ class WajibPajak extends Model
     public const jalan = self::table . '.jalan_wp';
     public const rt = self::table . '.rt_wp';
     public const rw = self::table . '.rw_wp';
+    public const kota = self::table.'.kota_wp';
     protected $table = self::table;
 
     protected $fillable = [
