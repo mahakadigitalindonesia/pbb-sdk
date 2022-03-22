@@ -106,6 +106,13 @@ class TransaksiServiceImpl implements TransaksiService
                 ->on(Pembayaran::kodeJenis, '=', Ketetapan::kodeJenis)
                 ->on(Pembayaran::tahun, '=', Ketetapan::tahun);
         })->whereNull(Pembayaran::kodeProvinsi)
+            ->where(Ketetapan::kodeProvinsi, $nop->kodeProvinsi)
+            ->where(Ketetapan::kodeDati, $nop->kodeDati)
+            ->where(Ketetapan::kodeKecamatan, $nop->kodeKecamatan)
+            ->where(Ketetapan::kodeKelurahan, $nop->kodeKelurahan)
+            ->where(Ketetapan::kodeBlok, $nop->kodeBlok)
+            ->where(Ketetapan::nomorUrut, $nop->nomorUrut)
+            ->where(Ketetapan::kodeJenis, $nop->kodeJenis)
             ->where(Ketetapan::tahun, '>', TahunKetetapan::maxYear())
             ->orderByDesc(Ketetapan::tahun)->get()->mapInto(TransaksiOP::class);
     }
