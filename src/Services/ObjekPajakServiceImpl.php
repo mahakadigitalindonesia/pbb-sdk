@@ -214,6 +214,7 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                     AND SPPT.NO_URUT=DAT_OBJEK_PAJAK.NO_URUT
                     AND SPPT.KD_JNS_OP=DAT_OBJEK_PAJAK.KD_JNS_OP
                     AND SPPT.STATUS_PEMBAYARAN_SPPT=0
+                    AND SPPT.THN_PAJAK_SPPT = EXTRACT (YEAR FROM SYSDATE)
                     AND SPPT.PBB_TERHUTANG_SPPT BETWEEN ' . $buku->min_buku . ' AND ' . $buku->max_buku;
                 $q->whereRaw(ObjekPajak::kodeProvinsi . '||' . ObjekPajak::kodeDati . '||' . ObjekPajak::kodeKecamatan . '||' . ObjekPajak::kodeKelurahan . '||' . ObjekPajak::kodeBlok . '||' . ObjekPajak::nomorUrut . '||' . ObjekPajak::kodeJenis . ' IN (' . $selectSpptBuku . ')');
             });
