@@ -26,6 +26,7 @@ class Ketetapan extends Model
     public const tahun = self::table . '.' . TransaksiColumns::tahun;
     public const tanggalJatuhTempo = self::table . '.tgl_jatuh_tempo_sppt';
     public const totalTagihanPajak = self::table . '.pbb_yg_harus_dibayar_sppt';
+    public const statusPembayaran = self::table. '.status_pembayaran_sppt';
 
 
     protected $table = self::table;
