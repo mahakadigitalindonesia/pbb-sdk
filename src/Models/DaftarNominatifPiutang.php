@@ -5,11 +5,11 @@ namespace Mdigi\PBB\Models;
 use Illuminate\Database\Eloquent\Model;
 use Mdigi\PBB\Models\Traits\ConfigurableDatabaseConnection;
 
-class DaftarNominatif extends Model
+class DaftarNominatifPiutang extends Model
 {
     use ConfigurableDatabaseConnection;
 
-    protected $table = 'dafnom_op';
+    protected $table = 'dafnom_piutang';
     protected $guarded = [];
     protected $keyType = 'string';
     protected $primaryKey = 'no_urut';
