@@ -58,15 +58,7 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                     ->where(Ketetapan::tahun, '>', TahunKetetapan::maxYear())
                     ->orderByDesc(Ketetapan::tahun)->get();
 
-                $op = DaftarNominatifOP::query()->where([
-                    OPColumns::kodeProvinsi => $nop->kodeProvinsi,
-                    OPColumns::kodeDati => $nop->kodeDati,
-                    OPColumns::kodeKecamatan => $nop->kodeKecamatan,
-                    OPColumns::kodeKelurahan => $nop->kodeKelurahan,
-                    OPColumns::kodeBlok => $nop->kodeBlok,
-                    OPColumns::nomorUrut => $nop->nomorUrut,
-                    OPColumns::kodeJenis => $nop->kodeJenis,
-                    'thn_pembentukan' => date('Y')])->first();
+                $op = $this->getQueryOP($nop)->first();
                 if (!$op) {
                     DaftarNominatifOP::query()->create([
                         OPColumns::kodeProvinsi => $nop->kodeProvinsi,
@@ -88,7 +80,7 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                         'nip_pembentuk' => $nip
                     ]);
                 } else {
-                    $op->update([
+                    $this->getQueryOP($nop)->update([
                         'jalan_op' => $objekPajak->jalan,
                         'blok_kav_no_op' => $objekPajak->blokKavlingNomor,
                         'rw_op' => $objekPajak->rw,
@@ -104,17 +96,7 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                 }
 
                 foreach ($listKetetapan as $ketetapan) {
-                    $piutang = DaftarNominatifPiutang::query()->where([
-                        OPColumns::kodeProvinsi => $nop->kodeProvinsi,
-                        OPColumns::kodeDati => $nop->kodeDati,
-                        OPColumns::kodeKecamatan => $nop->kodeKecamatan,
-                        OPColumns::kodeKelurahan => $nop->kodeKelurahan,
-                        OPColumns::kodeBlok => $nop->kodeBlok,
-                        OPColumns::nomorUrut => $nop->nomorUrut,
-                        OPColumns::kodeJenis => $nop->kodeJenis,
-                        TransaksiColumns::tahun => $ketetapan->thn_pajak_sppt,
-                        'thn_pembentukan' => date('Y')
-                    ])->first();
+                    $piutang = $this->getQueryPiutang($nop, $ketetapan->thn_pajak_sppt)->first();
                     if (!$piutang) {
                         DaftarNominatifPiutang::query()->create([
                             OPColumns::kodeProvinsi => $nop->kodeProvinsi,
@@ -144,7 +126,7 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                             'nip_pembentuk' => $nip
                         ]);
                     } else {
-                        $piutang->update([
+                        $this->getQueryPiutang($nop, $ketetapan->thn_pajak_sppt)->update([
                             'nm_wp_sppt' => $ketetapan->nm_wp_sppt,
                             'jln_wp_sppt' => $ketetapan->jln_wp_sppt,
                             'blok_kav_no_wp_sppt' => $ketetapan->blok_kav_no_wp_sppt,
@@ -171,7 +153,33 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                 throw new \Exception('Tidak dapat menyimpan daftar nominatif');
             }
         });
+    }
 
+    private function getQueryOP(NOP $nop)
+    {
+        return DaftarNominatifOP::query()->where([
+            OPColumns::kodeProvinsi => $nop->kodeProvinsi,
+            OPColumns::kodeDati => $nop->kodeDati,
+            OPColumns::kodeKecamatan => $nop->kodeKecamatan,
+            OPColumns::kodeKelurahan => $nop->kodeKelurahan,
+            OPColumns::kodeBlok => $nop->kodeBlok,
+            OPColumns::nomorUrut => $nop->nomorUrut,
+            OPColumns::kodeJenis => $nop->kodeJenis,
+            'thn_pembentukan' => date('Y')]);
+    }
 
+    private function getQueryPiutang(NOP $nop, string $tahunPajak)
+    {
+        return DaftarNominatifPiutang::query()->where([
+            OPColumns::kodeProvinsi => $nop->kodeProvinsi,
+            OPColumns::kodeDati => $nop->kodeDati,
+            OPColumns::kodeKecamatan => $nop->kodeKecamatan,
+            OPColumns::kodeKelurahan => $nop->kodeKelurahan,
+            OPColumns::kodeBlok => $nop->kodeBlok,
+            OPColumns::nomorUrut => $nop->nomorUrut,
+            OPColumns::kodeJenis => $nop->kodeJenis,
+            TransaksiColumns::tahun => $tahunPajak,
+            'thn_pembentukan' => date('Y')
+        ]);
     }
 }
