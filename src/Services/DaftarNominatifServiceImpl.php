@@ -106,7 +106,7 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                 'tgl_pembentukan' => Carbon::now(),
                 'nip_pembentuk' => $nip,
                 'tgl_pemutakhiran' => Carbon::now(),
-                'nip_pemuakhir' => $nip,
+                'nip_pemutakhir' => $nip,
                 'thn_pembentukan' => date('Y'),
             ]);
         }
