@@ -58,7 +58,7 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                     ->where(Ketetapan::tahun, '>', TahunKetetapan::maxYear())
                     ->orderByDesc(Ketetapan::tahun)->get();
 
-                DaftarNominatifOP::query()->updateOrCreate([
+                $op = DaftarNominatifOP::query()->where([
                     OPColumns::kodeProvinsi => $nop->kodeProvinsi,
                     OPColumns::kodeDati => $nop->kodeDati,
                     OPColumns::kodeKecamatan => $nop->kodeKecamatan,
@@ -66,24 +66,45 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                     OPColumns::kodeBlok => $nop->kodeBlok,
                     OPColumns::nomorUrut => $nop->nomorUrut,
                     OPColumns::kodeJenis => $nop->kodeJenis,
-                    'thn_pembentukan' => date('Y')
-                ], [
-                    'jalan_op' => $objekPajak->jalan,
-                    'blok_kav_no_op' => $objekPajak->blokKavlingNomor,
-                    'rw_op' => $objekPajak->rw,
-                    'rt_op' => $objekPajak->rt,
-                    'jns_bumi' => $objekPajak->kodeTanah,
-                    'kd_status_wp' => 1,
-                    'kategori_op' => 4,
-                    'tgl_pembentukan' => Carbon::now(),
-                    'nip_pembentuk' => $nip,
-                    'tgl_pemutakhiran' => Carbon::now(),
-                    'nip_pemutakhir' => $nip,
-                ]);
+                    'thn_pembentukan' => date('Y')])->first();
+                if (!$op) {
+                    DaftarNominatifOP::query()->create([
+                        OPColumns::kodeProvinsi => $nop->kodeProvinsi,
+                        OPColumns::kodeDati => $nop->kodeDati,
+                        OPColumns::kodeKecamatan => $nop->kodeKecamatan,
+                        OPColumns::kodeKelurahan => $nop->kodeKelurahan,
+                        OPColumns::kodeBlok => $nop->kodeBlok,
+                        OPColumns::nomorUrut => $nop->nomorUrut,
+                        OPColumns::kodeJenis => $nop->kodeJenis,
+                        'thn_pembentukan' => date('Y'),
+                        'jalan_op' => $objekPajak->jalan,
+                        'blok_kav_no_op' => $objekPajak->blokKavlingNomor,
+                        'rw_op' => $objekPajak->rw,
+                        'rt_op' => $objekPajak->rt,
+                        'jns_bumi' => $objekPajak->kodeTanah,
+                        'kd_status_wp' => 1,
+                        'kategori_op' => 4,
+                        'tgl_pembentukan' => Carbon::now(),
+                        'nip_pembentuk' => $nip
+                    ]);
+                } else {
+                    $op->update([
+                        'jalan_op' => $objekPajak->jalan,
+                        'blok_kav_no_op' => $objekPajak->blokKavlingNomor,
+                        'rw_op' => $objekPajak->rw,
+                        'rt_op' => $objekPajak->rt,
+                        'jns_bumi' => $objekPajak->kodeTanah,
+                        'kd_status_wp' => 1,
+                        'kategori_op' => 4,
+                        'tgl_pembentukan' => Carbon::now(),
+                        'nip_pembentuk' => $nip,
+                        'tgl_pemutakhiran' => Carbon::now(),
+                        'nip_pemutakhir' => $nip,
+                    ]);
+                }
 
                 foreach ($listKetetapan as $ketetapan) {
-
-                    DaftarNominatifPiutang::query()->updateOrCreate([
+                    $piutang = DaftarNominatifPiutang::query()->where([
                         OPColumns::kodeProvinsi => $nop->kodeProvinsi,
                         OPColumns::kodeDati => $nop->kodeDati,
                         OPColumns::kodeKecamatan => $nop->kodeKecamatan,
@@ -93,26 +114,57 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                         OPColumns::kodeJenis => $nop->kodeJenis,
                         TransaksiColumns::tahun => $ketetapan->thn_pajak_sppt,
                         'thn_pembentukan' => date('Y')
-                    ], [
-                        'nm_wp_sppt' => $ketetapan->nm_wp_sppt,
-                        'jln_wp_sppt' => $ketetapan->jln_wp_sppt,
-                        'blok_kav_no_wp_sppt' => $ketetapan->blok_kav_no_wp_sppt,
-                        'rw_wp_sppt' => $ketetapan->rw_wp_sppt,
-                        'rt_wp_sppt' => $ketetapan->rt_wp_sppt,
-                        'kelurahan_wp_sppt' => $ketetapan->kelurahan_wp_sppt,
-                        'kota_wp_sppt' => $ketetapan->kota_wp_sppt,
-                        'luas_bumi_sppt' => $ketetapan->luas_bumi_sppt,
-                        'luas_bng_sppt' => $ketetapan->luas_bng_sppt,
-                        'njop_bumi_sppt' => $ketetapan->njop_bumi_sppt,
-                        'njop_bng_sppt' => $ketetapan->njop_bng_sppt,
-                        'pbb_yg_harus_dibayar_sppt' => $ketetapan->pbb_yg_harus_dibayar_sppt,
-                        'tgl_jatuh_tempo_sppt' => $ketetapan->tgl_jatuh_tempo_sppt,
-                        'status_bayar' => $ketetapan->status_bayar,
-                        'tgl_pembentukan' => Carbon::now(),
-                        'nip_pembentuk' => $nip,
-                        'tgl_pemutakhiran' => Carbon::now(),
-                        'nip_pemutakhir' => $nip
-                    ]);
+                    ])->first();
+                    if (!$piutang) {
+                        DaftarNominatifPiutang::query()->create([
+                            OPColumns::kodeProvinsi => $nop->kodeProvinsi,
+                            OPColumns::kodeDati => $nop->kodeDati,
+                            OPColumns::kodeKecamatan => $nop->kodeKecamatan,
+                            OPColumns::kodeKelurahan => $nop->kodeKelurahan,
+                            OPColumns::kodeBlok => $nop->kodeBlok,
+                            OPColumns::nomorUrut => $nop->nomorUrut,
+                            OPColumns::kodeJenis => $nop->kodeJenis,
+                            TransaksiColumns::tahun => $ketetapan->thn_pajak_sppt,
+                            'thn_pembentukan' => date('Y'),
+                            'nm_wp_sppt' => $ketetapan->nm_wp_sppt,
+                            'jln_wp_sppt' => $ketetapan->jln_wp_sppt,
+                            'blok_kav_no_wp_sppt' => $ketetapan->blok_kav_no_wp_sppt,
+                            'rw_wp_sppt' => $ketetapan->rw_wp_sppt,
+                            'rt_wp_sppt' => $ketetapan->rt_wp_sppt,
+                            'kelurahan_wp_sppt' => $ketetapan->kelurahan_wp_sppt,
+                            'kota_wp_sppt' => $ketetapan->kota_wp_sppt,
+                            'luas_bumi_sppt' => $ketetapan->luas_bumi_sppt,
+                            'luas_bng_sppt' => $ketetapan->luas_bng_sppt,
+                            'njop_bumi_sppt' => $ketetapan->njop_bumi_sppt,
+                            'njop_bng_sppt' => $ketetapan->njop_bng_sppt,
+                            'pbb_yg_harus_dibayar_sppt' => $ketetapan->pbb_yg_harus_dibayar_sppt,
+                            'tgl_jatuh_tempo_sppt' => $ketetapan->tgl_jatuh_tempo_sppt,
+                            'status_bayar' => 0,
+                            'tgl_pembentukan' => Carbon::now(),
+                            'nip_pembentuk' => $nip
+                        ]);
+                    } else {
+                        $piutang->update([
+                            'nm_wp_sppt' => $ketetapan->nm_wp_sppt,
+                            'jln_wp_sppt' => $ketetapan->jln_wp_sppt,
+                            'blok_kav_no_wp_sppt' => $ketetapan->blok_kav_no_wp_sppt,
+                            'rw_wp_sppt' => $ketetapan->rw_wp_sppt,
+                            'rt_wp_sppt' => $ketetapan->rt_wp_sppt,
+                            'kelurahan_wp_sppt' => $ketetapan->kelurahan_wp_sppt,
+                            'kota_wp_sppt' => $ketetapan->kota_wp_sppt,
+                            'luas_bumi_sppt' => $ketetapan->luas_bumi_sppt,
+                            'luas_bng_sppt' => $ketetapan->luas_bng_sppt,
+                            'njop_bumi_sppt' => $ketetapan->njop_bumi_sppt,
+                            'njop_bng_sppt' => $ketetapan->njop_bng_sppt,
+                            'pbb_yg_harus_dibayar_sppt' => $ketetapan->pbb_yg_harus_dibayar_sppt,
+                            'tgl_jatuh_tempo_sppt' => $ketetapan->tgl_jatuh_tempo_sppt,
+                            'status_bayar' => 0,
+                            'tgl_pembentukan' => Carbon::now(),
+                            'nip_pembentuk' => $nip,
+                            'tgl_pemutakhiran' => Carbon::now(),
+                            'nip_pemutakhir' => $nip
+                        ]);
+                    }
                 }
             } catch (\Exception $e) {
                 report($e);
