@@ -67,8 +67,8 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
         ], [
             'jalan_op' => $objekPajak->jalan,
             'blok_kav_no_op' => $objekPajak->blokKavlingNomor,
-            'rw_op' => $objekPajak->rt,
-            'rt_op' => $objekPajak->rw,
+            'rw_op' => $objekPajak->rw,
+            'rt_op' => $objekPajak->rt,
             'jns_bumi' => $objekPajak->kodeTanah,
             'kd_status_wp' => 1,
             'kategori_op' => 4,
