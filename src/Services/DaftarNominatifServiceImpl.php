@@ -30,7 +30,7 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
         DB::connection(config('config.database.connection'))->transaction(function () use ($nop, $nip) {
             try {
                 $objekPajak = $this->objekPajakService->findByNOP($nop);
-                $listKetetapan = Ketetapan::query()->select(['*'])->join(ObjekPajak::table, function ($join) {
+                $listKetetapan = Ketetapan::query()->select(Ketetapan::allColumns)->join(ObjekPajak::table, function ($join) {
                     $join->on(ObjekPajak::kodeProvinsi, '=', Ketetapan::kodeProvinsi)
                         ->on(ObjekPajak::kodeDati, '=', Ketetapan::kodeDati)
                         ->on(ObjekPajak::kodeKecamatan, '=', Ketetapan::kodeKecamatan)
@@ -82,6 +82,7 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                 ]);
 
                 foreach ($listKetetapan as $ketetapan) {
+
                     DaftarNominatifPiutang::query()->updateOrCreate([
                         OPColumns::kodeProvinsi => $nop->kodeProvinsi,
                         OPColumns::kodeDati => $nop->kodeDati,
