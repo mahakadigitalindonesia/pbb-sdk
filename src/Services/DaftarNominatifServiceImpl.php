@@ -88,8 +88,6 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                         'jns_bumi' => $objekPajak->kodeTanah,
                         'kd_status_wp' => 1,
                         'kategori_op' => 4,
-                        'tgl_pembentukan' => Carbon::now(),
-                        'nip_pembentuk' => $nip,
                         'tgl_pemutakhiran' => Carbon::now(),
                         'nip_pemutakhir' => $nip,
                     ]);
@@ -141,8 +139,6 @@ class DaftarNominatifServiceImpl implements DaftarNominatifService
                             'pbb_yg_harus_dibayar_sppt' => $ketetapan->pbb_yg_harus_dibayar_sppt,
                             'tgl_jatuh_tempo_sppt' => $ketetapan->tgl_jatuh_tempo_sppt,
                             'status_bayar' => 0,
-                            'tgl_pembentukan' => Carbon::now(),
-                            'nip_pembentuk' => $nip,
                             'tgl_pemutakhiran' => Carbon::now(),
                             'nip_pemutakhir' => $nip
                         ]);
