@@ -17,12 +17,10 @@ use Mdigi\PBB\Models\ObjekPajak;
 class DaftarNominatifServiceImpl implements DaftarNominatifService
 {
     private ObjekPajakService $objekPajakService;
-    private WajibPajakService $wajibPajakService;
 
-    public function __construct(ObjekPajakService $objekPajakService, WajibPajakService $wajibPajakService)
+    public function __construct(ObjekPajakService $objekPajakService)
     {
         $this->objekPajakService = $objekPajakService;
-        $this->wajibPajakService = $wajibPajakService;
     }
 
     public function save(NOP $nop, string $nip)

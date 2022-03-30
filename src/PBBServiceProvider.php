@@ -6,6 +6,7 @@ namespace Mdigi\PBB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Mdigi\PBB\Contracts\BangunanService;
+use Mdigi\PBB\Contracts\DaftarNominatifService;
 use Mdigi\PBB\Contracts\KecamatanService;
 use Mdigi\PBB\Contracts\KelurahanService;
 use Mdigi\PBB\Contracts\KetetapanService;
@@ -18,6 +19,7 @@ use Mdigi\PBB\Contracts\TransaksiService;
 use Mdigi\PBB\Contracts\WajibPajakService;
 use Mdigi\PBB\Helpers\Options;
 use Mdigi\PBB\Services\BangunanServiceImpl;
+use Mdigi\PBB\Services\DaftarNominatifServiceImpl;
 use Mdigi\PBB\Services\KecamatanServiceImpl;
 use Mdigi\PBB\Services\KelurahanServiceImpl;
 use Mdigi\PBB\Services\KetetapanServiceImpl;
@@ -85,6 +87,9 @@ class PBBServiceProvider extends ServiceProvider
         $this->app->bind(TransaksiService::class, TransaksiServiceImpl::class);
         $this->app->bind(NomorBundelService::class, NomorBundelServiceImpl::class);
         $this->app->bind(PelayananService::class, PelayananServiceImpl::class);
+        $this->app->bind(DaftarNominatifService::class, function($app){
+            return new DaftarNominatifServiceImpl($app->make(ObjekPajakService::class));
+        });
     }
 
     protected function registerRoutes()
