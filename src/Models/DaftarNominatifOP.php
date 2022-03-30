@@ -12,7 +12,7 @@ class DaftarNominatifOP extends Model
     protected $table = 'dafnom_op';
     protected $guarded = [];
     protected $keyType = 'string';
-    protected $primaryKey = 'no_urut';
+    protected $primaryKey = 'thn_pembentukan';
     public $incrementing = false;
     public $timestamps = false;
 }
