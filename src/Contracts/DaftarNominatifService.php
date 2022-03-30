@@ -2,9 +2,9 @@
 
 namespace Mdigi\PBB\Contracts;
 
-use Mdigi\PBB\Domains\DataObjekPajak;
+use Mdigi\PBB\Dtos\NOP;
 
 interface DaftarNominatifService
 {
-    public function save(DataObjekPajak $objekPajak);
+    public function save(NOP $nop, string $nip);
 }

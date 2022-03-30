@@ -2,27 +2,53 @@
 
 namespace Mdigi\PBB\Services;
 
+use Carbon\Carbon;
 use Mdigi\PBB\Contracts\DaftarNominatifService;
+use Mdigi\PBB\Contracts\ObjekPajakService;
+use Mdigi\PBB\Contracts\WajibPajakService;
 use Mdigi\PBB\Domains\DataObjekPajak;
+use Mdigi\PBB\Dtos\NOP;
+use Mdigi\PBB\Exceptions\DataOpNotFoundException;
 use Mdigi\PBB\Helpers\OPColumns;
 use Mdigi\PBB\Models\DaftarNominatif;
+use Mdigi\PBB\Models\ObjekBumi;
+use Mdigi\PBB\Models\ObjekPajak;
 
 class DaftarNominatifServiceImpl implements DaftarNominatifService
 {
+    private ObjekPajakService $objekPajakService;
+    private WajibPajakService $wajibPajakService;
 
-    public function save(DataObjekPajak $objekPajak)
+    public function __construct(ObjekPajakService $objekPajakService, WajibPajakService $wajibPajakService)
     {
-        DaftarNominatif::create([
-            OPColumns::kodeProvinsi => $objekPajak->getKodeProvinsi(),
-            OPColumns::kodeDati => $objekPajak->getKodeDati(),
-            OPColumns::kodeKecamatan => $objekPajak->getKodeKecamatan(),
-            OPColumns::kodeKelurahan => $objekPajak->getKodeKelurahan(),
-            OPColumns::kodeBlok => $objekPajak->getKodeBlok(),
-            OPColumns::nomorUrut => $objekPajak->getNomorUrut(),
-            OPColumns::kodeJenis => $objekPajak->getKodeJenis(),
-            'jalan_op' => $objekPajak->getJalan(),
-            'blok_kav_no_op' => $objekPajak->getBlokKavlingNomor(),
-            'rw_op' => $objekPajak->getRw()
+        $this->objekPajakService = $objekPajakService;
+        $this->wajibPajakService = $wajibPajakService;
+    }
+
+    public function save(NOP $nop, string $nip)
+    {
+        $objekPajak = $this->objekPajakService->findByNOP($nop);
+        DaftarNominatif::query()->updateOrCreate([
+            OPColumns::kodeProvinsi => $nop->kodeProvinsi,
+            OPColumns::kodeDati => $nop->kodeDati,
+            OPColumns::kodeKecamatan => $nop->kodeKecamatan,
+            OPColumns::kodeKelurahan => $nop->kodeKelurahan,
+            OPColumns::kodeBlok => $nop->kodeBlok,
+            OPColumns::nomorUrut => $nop->nomorUrut,
+            OPColumns::kodeJenis => $nop->kodeJenis,
+            'thn_pembentukan' => date('Y')
+        ], [
+            'jalan_op' => $objekPajak->jalan,
+            'blok_kav_no_op' => $objekPajak->blokKavlingNomor,
+            'rw_op' => $objekPajak->rt,
+            'rt_op' => $objekPajak->rw,
+            'jns_bumi' => $objekPajak->kodeTanah,
+            'kd_status_wp' => 1,
+            'kategori_op' => 4,
+            'tgl_pembentukan' => Carbon::now(),
+            'nip_pembentuk' => $nip,
+            'tgl_pemutakhiran' => Carbon::now(),
+            'nip_pemutakhir' => $nip,
         ]);
     }
 }
