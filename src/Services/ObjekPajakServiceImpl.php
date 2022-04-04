@@ -96,30 +96,53 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                 OPColumns::nomorUrut => $objekPajak->getNomorUrut(),
                 OPColumns::kodeJenis => $objekPajak->getKodeJenis() ?? '0',
             ];
-            DB::connection(config('pbb.database.connection'))->table(ObjekPajak::table)->updateOrInsert($keys, [
-                'subjek_pajak_id' => Str::padRight($objekPajak->getWajibPajakId(), 30),
-                'no_formulir_spop' => $objekPajak->getNomorFormulirSPOP(),
-                'no_persil' => Str::limit($objekPajak->getNomorSertifikat(), 5, ''),
-                'jalan_op' => Str::limit($objekPajak->getJalan(), 30, ''),
-                'blok_kav_no_op' => Str::limit($objekPajak->getBlokKavlingNomor(), 15, ''),
-                'rw_op' => Str::limit($objekPajak->getRw(), 2, ''),
-                'rt_op' => Str::limit($objekPajak->getRt(), 3, ''),
-                'kd_status_cabang' => 0,
-                'kd_status_wp' => $objekPajak->getKodeKepemilikan(),
-                'total_luas_bumi' => $objekPajak->getLuasTanah(),
-                'total_luas_bng' => 0,
-                'njop_bumi' => 0,
-                'njop_bng' => 0,
-                'status_peta_op' => 0,
-                'jns_transaksi_op' => $objekPajak->getJenisTransaksi(),
-                'tgl_pendataan_op' => $objekPajak->getTanggalPendataan(),
-                'nip_pendata' => $objekPajak->getNipPendata(),
-                'tgl_pemeriksaan_op' => $objekPajak->getTanggalPemeriksaan(),
-                'nip_pemeriksa_op' => $objekPajak->getNipPemeriksa(),
-                'tgl_perekaman_op' => Carbon::now(),
-                'nip_perekam_op' => $objekPajak->getNipPerekam(),
-            ]);
-
+            $op = ObjekPajak::query()->where($keys)->first();
+            if (!$op) {
+                DB::connection(config('pbb.database.connection'))->table(ObjekPajak::table)->insert(array_merge($keys, [
+                    'subjek_pajak_id' => Str::padRight($objekPajak->getWajibPajakId(), 30),
+                    'no_formulir_spop' => $objekPajak->getNomorFormulirSPOP(),
+                    'no_persil' => Str::limit($objekPajak->getNomorSertifikat(), 5, ''),
+                    'jalan_op' => Str::limit($objekPajak->getJalan(), 30, ''),
+                    'blok_kav_no_op' => Str::limit($objekPajak->getBlokKavlingNomor(), 15, ''),
+                    'rw_op' => Str::limit($objekPajak->getRw(), 2, ''),
+                    'rt_op' => Str::limit($objekPajak->getRt(), 3, ''),
+                    'kd_status_cabang' => 0,
+                    'kd_status_wp' => $objekPajak->getKodeKepemilikan(),
+                    'total_luas_bumi' => $objekPajak->getLuasTanah(),
+                    'total_luas_bng' => 0,
+                    'njop_bumi' => 0,
+                    'njop_bng' => 0,
+                    'status_peta_op' => 0,
+                    'jns_transaksi_op' => $objekPajak->getJenisTransaksi(),
+                    'tgl_pendataan_op' => $objekPajak->getTanggalPendataan(),
+                    'nip_pendata' => $objekPajak->getNipPendata(),
+                    'tgl_pemeriksaan_op' => $objekPajak->getTanggalPemeriksaan(),
+                    'nip_pemeriksa_op' => $objekPajak->getNipPemeriksa(),
+                    'tgl_perekaman_op' => Carbon::now(),
+                    'nip_perekam_op' => $objekPajak->getNipPerekam(),
+                ]));
+            } else {
+                DB::connection(config('pbb.database.connection'))->table(ObjekPajak::table)->where($keys)->update(
+                    [
+                        'subjek_pajak_id' => Str::padRight($objekPajak->getWajibPajakId(), 30),
+                        'no_formulir_spop' => $objekPajak->getNomorFormulirSPOP(),
+                        'no_persil' => Str::limit($objekPajak->getNomorSertifikat(), 5, ''),
+                        'jalan_op' => Str::limit($objekPajak->getJalan(), 30, ''),
+                        'blok_kav_no_op' => Str::limit($objekPajak->getBlokKavlingNomor(), 15, ''),
+                        'rw_op' => Str::limit($objekPajak->getRw(), 2, ''),
+                        'rt_op' => Str::limit($objekPajak->getRt(), 3, ''),
+                        'kd_status_wp' => $objekPajak->getKodeKepemilikan(),
+                        'total_luas_bumi' => $objekPajak->getLuasTanah(),
+                        'jns_transaksi_op' => $objekPajak->getJenisTransaksi(),
+                        'tgl_pendataan_op' => $objekPajak->getTanggalPendataan(),
+                        'nip_pendata' => $objekPajak->getNipPendata(),
+                        'tgl_pemeriksaan_op' => $objekPajak->getTanggalPemeriksaan(),
+                        'nip_pemeriksa_op' => $objekPajak->getNipPemeriksa(),
+                        'tgl_perekaman_op' => Carbon::now(),
+                        'nip_perekam_op' => $objekPajak->getNipPerekam(),
+                    ]
+                );
+            }
             DB::connection(config('pbb.database.connection'))->table(ObjekBumi::table)
                 ->updateOrInsert(Arr::add($keys, 'no_bumi', 1), [
                     'kd_znt' => Str::limit($objekPajak->getKodeZonaNilaiTanah(), 2, ''),
