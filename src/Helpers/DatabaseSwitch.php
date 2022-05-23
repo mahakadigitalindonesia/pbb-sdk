@@ -15,18 +15,18 @@ abstract class DatabaseSwitch
     ];
 
     static $TABLE_REF_JPB_MAP = [
-        self::SIMPBB => 'jpb_jpt',
-        self::SISMIOP => 'ref_jpb',
+        self::SIMPBB => 'ref_jpb',
+        self::SISMIOP => 'jpb_jpt',
     ];
 
     static $COLUMN_KD_JPB_MAP = [
-        self::SIMPBB => 'kd_jpb_jpt',
-        self::SISMIOP => 'kd_jpb',
+        self::SIMPBB => 'kd_jpb',
+        self::SISMIOP => 'kd_jpb_jpt',
     ];
 
     static $COLUMN_NM_JPB_MAP = [
-        self::SIMPBB => 'nm_jpb_jpt',
-        self::SISMIOP => 'nm_jpb',
+        self::SIMPBB => 'nm_jpb',
+        self::SISMIOP => 'nm_jpb_jpt',
     ];
 
     public static function refKantor()
