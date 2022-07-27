@@ -149,6 +149,18 @@ class ObjekPajakServiceImpl implements ObjekPajakService
                     'luas_bumi' => $objekPajak->getLuasTanah(),
                     'jns_bumi' => $objekPajak->getJenisTanah(),
                 ]);
+            DB::connection(config('pbb.database.connection'))
+                ->statement("call penentuan_njop(:kodeProvinsi, :kodeDati, :kodeKecamatan, :kodeKelurahan, :kodeBlok, :noUrut, :kodeJenis, :tahun, :flag)", [
+                    'kodeProvinsi' => $keys[OPColumns::kodeProvinsi],
+                    'kodeDati' => $keys[OPColumns::kodeDati],
+                    'kodeKecamatan' => $keys[OPColumns::kodeKecamatan],
+                    'kodeKelurahan' => $keys[OPColumns::kodeKelurahan],
+                    'kodeBlok' => $keys[OPColumns::kodeBlok],
+                    'noUrut' => $keys[OPColumns::nomorUrut],
+                    'kodeJenis' => $keys[OPColumns::kodeJenis],
+                    'tahun' => (string)Carbon::now()->year,
+                    'flag' => 1,
+                ]);
         });
 
         return $this->findByNOP(new NOP($objekPajak->getKodeProvinsi() ?? $kota->kd_propinsi, $objekPajak->getKodeDati() ?? $kota->kd_dati2, $objekPajak->getKodeKecamatan(), $objekPajak->getKodeKelurahan(), $objekPajak->getKodeBlok(), $objekPajak->getNomorUrut(), $objekPajak->getKodeJenis()));
