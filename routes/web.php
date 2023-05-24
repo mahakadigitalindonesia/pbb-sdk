@@ -20,6 +20,7 @@ Route::prefix('kecamatan')->group(function () {
 Route::get('objek-pajak/{nop}', [ObjekPajakController::class, 'nop'])->name('pbb.objek-pajak.nop');
 
 Route::get('wajib-pajak/{id}', [WajibPajakController::class, 'detail'])->name('pbb.wajib-pajak.detail');
+Route::get('wajib-pajak', [WajibPajakController::class, 'detailById'])->name('pbb.wajib-pajak.detail-by-id');
 
 Route::get('transaksi/{nop}', [TransaksiController::class, 'nop'])->name('pbb.transaksi.nop');
 Route::get('transaksi/{nop}/{tahun}', [TransaksiController::class, 'nopTahun'])->name('pbb.transaksi.nop.tahun');
